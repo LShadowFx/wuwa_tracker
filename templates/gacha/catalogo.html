@@ -1,0 +1,62 @@
+{% extends "plantilla.html" %}
+{% block titulo %}Banners{% endblock %}
+
+{% block contenido %}
+<h1 class="h3 fw-bold mb-1">Banners</h1>
+<p class="text-secondary mb-4">Desliza hacia abajo para ver los 3 banners disponibles. Tira directo desde cada uno.</p>
+
+{% for banner in banners %}
+<section
+    class="banner-hero banner-hero--{{ banner.tipo }}"
+    style="{{ banner.imagen_fondo_css }}"
+>
+    <div class="banner-hero-overlay"></div>
+    <div class="banner-hero-contenido">
+        <span class="badge-tipo">{{ banner.get_tipo_display }}</span>
+        <h2>{{ banner.nombre }}</h2>
+        <p class="banner-desc">{{ banner.descripcion }}</p>
+
+        {% if banner.item_destacado %}
+        <div class="destacado-pill">
+            <i class="bi bi-star-fill"></i> Destacado: {{ banner.item_destacado.nombre }} ({{ banner.item_destacado.rareza }}&#9733;)
+        </div>
+        {% endif %}
+
+        <div class="pull-actions">
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'gacha:simular' %}" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="banner" value="{{ banner.id }}">
+                <input type="hidden" name="cantidad" value="1">
+                <button type="submit" class="btn-pull">Tirar x1</button>
+            </form>
+            <form method="post" action="{% url 'gacha:simular' %}" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="banner" value="{{ banner.id }}">
+                <input type="hidden" name="cantidad" value="10">
+                <button type="submit" class="btn-pull btn-pull-x10">Tirar x10</button>
+            </form>
+            {% else %}
+            <a href="{% url 'cuentas:login' %}" class="btn-pull-locked">
+                <i class="bi bi-lock-fill"></i> Inicia sesión para tirar
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div class="item-roster mb-5">
+    {% for item in banner.items.all %}
+    <div class="item-chip {% if item.es_destacado %}es-destacado{% endif %}">
+        <img src="{{ item.imagen.url }}" alt="{{ item.nombre }}">
+        <div class="item-nombre">{{ item.nombre }}</div>
+        <div class="small {% if item.rareza == 5 %}text-estrella-5{% else %}text-secondary{% endif %}">
+            {{ item.rareza }}&#9733;
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% empty %}
+<p>No hay banners cargados todavía. Carga el fixture con <code>loaddata</code>.</p>
+{% endfor %}
+{% endblock %}

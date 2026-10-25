@@ -1,0 +1,54 @@
+{% extends "plantilla.html" %}
+{% block titulo %}Resultado{% endblock %}
+
+{% block contenido %}
+<section
+    class="banner-hero banner-hero--{{ banner.tipo }}"
+    style="{{ banner.imagen_fondo_css }}"
+>
+    <div class="banner-hero-overlay"></div>
+    <div class="banner-hero-contenido text-center">
+        <span class="badge-tipo">{{ banner.get_tipo_display }}</span>
+        <h2>{{ banner.nombre }}</h2>
+        <p class="banner-desc mx-auto">{{ cantidad }} tirada{{ cantidad|pluralize }} realizadas</p>
+    </div>
+</section>
+
+{% if tiradas %}
+<div class="row row-cols-2 row-cols-md-5 g-3 mb-4">
+    {% for tirada in tiradas %}
+    <div class="col">
+        <div class="pull-card h-100 {% if tirada.item.rareza == 5 %}rareza-5{% else %}rareza-4{% endif %}">
+            <img src="{{ tirada.item.imagen.url }}" alt="{{ tirada.item.nombre }}">
+            <div class="p-2 text-center">
+                <div class="small fw-bold">{{ tirada.item.nombre }}</div>
+                <div class="small {% if tirada.item.rareza == 5 %}text-estrella-5{% else %}text-secondary{% endif %}">
+                    {{ tirada.item.rareza }}&#9733;
+                </div>
+                <div class="small text-muted">pity {{ tirada.pity_en_momento }}</div>
+                {% if tirada.gano_50_50 == False %}
+                <div class="badge text-bg-secondary mt-1">Perdiste el 50/50</div>
+                {% elif tirada.gano_50_50 == True %}
+                <div class="badge text-bg-success mt-1">Ganaste el 50/50</div>
+                {% endif %}
+
+                {% if not tirada.compartida %}
+                <form action="{% url 'gacha:compartir' tirada.id %}" method="post" class="mt-2">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-outline-info w-100">Compartir</button>
+                </form>
+                {% else %}
+                <span class="badge text-bg-info mt-2">Compartida</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Esta vez no obtuviste ningún 4&#9733; ni 5&#9733; (igual cuentan para tu pity, revisa tu dashboard).</p>
+{% endif %}
+
+<a href="{% url 'gacha:catalogo' %}" class="btn btn-outline-secondary">Volver a los banners</a>
+<a href="{% url 'gacha:dashboard' %}" class="btn btn-info">Ver mi dashboard</a>
+{% endblock %}
