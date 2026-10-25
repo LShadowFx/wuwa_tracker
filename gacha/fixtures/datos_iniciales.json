@@ -1,0 +1,58 @@
+[
+  {
+    "model": "gacha.banner",
+    "pk": 1,
+    "fields": {
+      "nombre": "Danza del Viento: Jiyan",
+      "tipo": "personaje",
+      "descripcion": "Banner limitado con probabilidad aumentada de obtener a Jiyan (5 estrellas, Aero, Broadblade)."
+    }
+  },
+  {
+    "model": "gacha.banner",
+    "pk": 2,
+    "fields": {
+      "nombre": "Filo Templado: Verdant Summit",
+      "tipo": "arma",
+      "descripcion": "Banner de arma limitada con probabilidad aumentada de obtener el broadblade Verdant Summit."
+    }
+  },
+  {
+    "model": "gacha.banner",
+    "pk": 3,
+    "fields": {
+      "nombre": "Banner Permanente",
+      "tipo": "permanente",
+      "descripcion": "Banner estandar, siempre disponible. Sin item destacado: el 5 estrellas que sale es al azar."
+    }
+  },
+
+  {"model": "gacha.item", "pk": 1, "fields": {"nombre": "Jiyan", "categoria": "personaje", "rareza": 5, "es_destacado": true, "banner": 1}},
+  {"model": "gacha.item", "pk": 2, "fields": {"nombre": "Aalto", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 1}},
+  {"model": "gacha.item", "pk": 3, "fields": {"nombre": "Danjin", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 1}},
+  {"model": "gacha.item", "pk": 4, "fields": {"nombre": "Taoqi", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 1}},
+
+  {"model": "gacha.item", "pk": 5, "fields": {"nombre": "Verdant Summit", "categoria": "arma", "rareza": 5, "es_destacado": true, "banner": 2}},
+  {"model": "gacha.item", "pk": 6, "fields": {"nombre": "Guardian Broadblade", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 2}},
+  {"model": "gacha.item", "pk": 7, "fields": {"nombre": "Guardian Pistols", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 2}},
+
+  {"model": "gacha.item", "pk": 8,  "fields": {"nombre": "Calcharo", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 9,  "fields": {"nombre": "Encore", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 10, "fields": {"nombre": "Jianxin", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 11, "fields": {"nombre": "Lingyang", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 12, "fields": {"nombre": "Verina", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 13, "fields": {"nombre": "Yinlin", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 14, "fields": {"nombre": "Emerald of Genesis", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 15, "fields": {"nombre": "Lustrous Razor", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 16, "fields": {"nombre": "Static Mist", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 17, "fields": {"nombre": "Abyss Surges", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 18, "fields": {"nombre": "Cosmic Ripples", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 19, "fields": {"nombre": "Baizhi", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 20, "fields": {"nombre": "Chixia", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 21, "fields": {"nombre": "Sanhua", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 22, "fields": {"nombre": "Mortefi", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 23, "fields": {"nombre": "Yangyang", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 24, "fields": {"nombre": "Yuanwu", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 25, "fields": {"nombre": "Guardian Sword", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 3}},
+  {"model": "gacha.item", "pk": 26, "fields": {"nombre": "Guardian Rectifier", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 3}}
+]
