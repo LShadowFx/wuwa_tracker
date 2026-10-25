@@ -2,4 +2,6 @@ from django.apps import AppConfig
 
 
 class CuentasConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
     name = 'cuentas'
+    verbose_name = 'Cuentas (login y logout)'
