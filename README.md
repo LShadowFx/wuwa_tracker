@@ -64,7 +64,7 @@ aplicación se comportan como cualquier usuario con sesión iniciada.
 | `/feed/`           | público   | Últimas 20 tiradas compartidas por los usuarios                         |
 | `/cuentas/login/`  | público   | Inicio de sesión                                                         |
 | `/cuentas/logout/` | sesión    | Cierre de sesión (el botón de la barra lo envía por POST)               |
-| `/simular/`        | **sesión**| Formulario de tirada (banner + cantidad x1 o x10). Valida y procesa     |
+| `/simular/`        | **sesión**| Formulario de tirada manual (banner + cantidad). Se abre desde el botón ‘Simular tiradas’ del dashboard|
 | `/resultado/`      | **sesión**| Resultado de la última simulación (guardado en la sesión)               |
 | `/dashboard/`      | **sesión**| Pity actual por banner e historial de las últimas 30 tiradas            |
 | `/compartir/<id>/` | **sesión**| (POST) publica una tirada propia en el feed                             |
