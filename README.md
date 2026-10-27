@@ -39,7 +39,7 @@ originales están en `imagenes_a_subir/` y se cargan con:
 python manage.py shell < subir_imagenes.py
 ```
 
-(en PowerShell: `Get-Content subir_imagenes.py | python manage.py shell`).
+(en PowerShell: 'python manage.py shell -c "exec(open('subir_imagenes.py', encoding='utf-8').read())').
 El script asocia cada foto con el item que tiene el mismo nombre.
 
 **Si se parte con una base vacía** (en vez de usar `db.sqlite3`): `python manage.py migrate`,
