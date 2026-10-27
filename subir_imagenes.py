@@ -1,28 +1,3 @@
-"""
-Sube varias imagenes de una sola vez, emparejando cada archivo con su
-Item segun el NOMBRE del archivo (no importa si usas mayusculas o
-minusculas, pero el texto debe ser igual al nombre del item).
-
-Como usarlo:
-1. Crea una carpeta llamada "imagenes_a_subir" en la raiz del proyecto
-   (al mismo nivel que manage.py).
-2. Adentro, pon cada foto con el mismo nombre que el item en el
-   catalogo, por ejemplo:
-       Jiyan.jpg
-       Verdant Summit.png
-       Guardian Broadblade.jpg
-   Extensiones aceptadas: .jpg, .jpeg, .png, .webp
-
-3. Corre este comando desde la raiz del proyecto (con el venv activado):
-       python manage.py shell < subir_imagenes.py
-
-4. Revisa el resumen que imprime al final: cuantas se subieron bien y
-   cuales nombres de archivo no calzaron con ningun item (por typos).
-
-Este script no se usa dentro de la aplicacion (no es una vista ni se
-ejecuta cuando alguien visita el sitio); es una herramienta para cargar
-datos auxiliares, igual que el fixture datos_iniciales.json.
-"""
 import os
 
 from django.core.files import File

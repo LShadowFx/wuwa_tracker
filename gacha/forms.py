@@ -19,11 +19,6 @@ class SimularTiradaForm(forms.Form):
     )
 
     def clean_cantidad(self):
-        """
-        Validacion explicita en el servidor: aunque el <select> del
-        formulario ya limita las opciones, no confiamos solo en eso
-        (alguien podria mandar el POST directo sin pasar por el HTML).
-        """
         cantidad = int(self.cleaned_data['cantidad'])
         if cantidad not in (1, 10):
             raise forms.ValidationError('La cantidad de tiradas solo puede ser 1 o 10.')

@@ -5,11 +5,6 @@ from django.shortcuts import render, redirect
 
 
 def login_view(request):
-    """
-    Inicio de sesion con cuentas ya existentes (ver README para las
-    cuentas de prueba). No hay vista de registro a proposito: el caso
-    pide "cuentas de prueba utilizables", no un flujo de alta de usuarios.
-    """
     if request.user.is_authenticated:
         return redirect('gacha:catalogo')
 

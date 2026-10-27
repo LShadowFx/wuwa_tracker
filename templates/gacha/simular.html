@@ -3,20 +3,16 @@
 {% block titulo %}Simular tiradas{% endblock %}
 
 {% block contenido %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card auth-card">
-            <div class="auth-card-top"></div>
-            <div class="card-body p-4">
-                <h1 class="h4 fw-bold mb-1">Simular tiradas</h1>
-                <p class="text-secondary small mb-3">Elige el banner y cuántas tiradas quieres hacer.</p>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form | crispy }}
-                    <button type="submit" class="btn btn-info w-100 mt-2">Tirar</button>
-                </form>
-            </div>
-        </div>
+<div class="auth-fondo">
+    <div class="auth-panel">
+        <span class="etiqueta">Convocación</span>
+        <h1>Simular tiradas</h1>
+        <p class="sub">Elige el banner y cuántas tiradas quieres hacer.</p>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button type="submit" class="btn-w btn-w--cian btn-w--block" style="margin-top:.6rem">Tirar</button>
+        </form>
     </div>
 </div>
 {% endblock %}

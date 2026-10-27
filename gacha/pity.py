@@ -11,7 +11,6 @@ PITY_4_MAXIMO = 10
 
 
 def probabilidad_5_estrellas(pity_actual):
-    """Calcula la probabilidad de 5 estrellas segun el pity acumulado."""
     if pity_actual < INICIO_SOFT_PITY:
         return PROBABILIDAD_BASE_5E
     pasos_en_soft_pity = pity_actual - (INICIO_SOFT_PITY - 1)
@@ -20,11 +19,6 @@ def probabilidad_5_estrellas(pity_actual):
 
 
 def _elegir_item_cinco_estrellas(banner, estado):
-    """
-    Decide que item de 5 estrellas entrega esta tirada segun el tipo de
-    banner, aplicando la regla del 50/50 cuando corresponde.
-    Devuelve una tupla (item, gano_50_50).
-    """
     items_5e = list(banner.items.filter(rareza=5))
 
     if banner.tipo == 'personaje':
@@ -33,9 +27,6 @@ def _elegir_item_cinco_estrellas(banner, estado):
         if estado.garantizado or random.random() < 0.5:
             estado.garantizado = False
             return destacado, True
-
-        # Perdio el 50/50: el 5 estrellas viene del pool estandar
-        # (banner permanente), no del propio banner limitado.
         estado.garantizado = True
         banner_permanente = Banner.objects.filter(tipo='permanente').first()
         if banner_permanente:
@@ -57,14 +48,6 @@ def _elegir_item_cinco_estrellas(banner, estado):
 
 
 def simular_una_tirada(banner, estado):
-    """
-    Simula UNA tirada individual sobre un banner, usando y actualizando
-    (en memoria, sin guardar todavia) el EstadoPity recibido.
-
-    Devuelve un diccionario, por ejemplo:
-        {'rareza': 3, 'item': None, 'gano_50_50': None, 'pity_en_momento': 45}
-        {'rareza': 5, 'item': <Item: Jiyan>, 'gano_50_50': True, 'pity_en_momento': 62}
-    """
     estado.pity_actual += 1
     estado.pity_4_actual += 1
 
@@ -109,16 +92,6 @@ def simular_una_tirada(banner, estado):
 
 
 def simular_tiradas(usuario, banner, cantidad):
-    """
-    Simula `cantidad` tiradas (1 o 10) para un usuario en un banner.
-
-    Actualiza y guarda el EstadoPity del usuario para ese banner, y crea
-    en la base de datos una fila Tirada por cada resultado de 4 o 5
-    estrellas (las de 3 estrellas no quedan registradas individualmente,
-    pero si cuentan para el contador de pity).
-
-    Devuelve la lista de objetos Tirada creados en esta simulacion.
-    """
     estado, _ = EstadoPity.objects.get_or_create(usuario=usuario, banner=banner)
 
     tiradas_creadas = []

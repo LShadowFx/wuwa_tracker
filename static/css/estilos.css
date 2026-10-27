@@ -1,7 +1,4 @@
-/* ==========================================================================
-   WuWa Tracker - tema Wuthering Waves
-   Paleta: cian "Tacet" (acento), dorado (5 estrellas), violeta (4 estrellas)
-   ========================================================================== */
+
 
 :root {
     --bg: #05080d;
@@ -1423,4 +1420,26 @@ code {
     .anillo-num {
         font-size: 1.9rem;
     }
+}
+/* Lista desplegable (select) legible sobre el fondo oscuro */
+select,
+.form-select {
+    color-scheme: dark;
+    background-color: var(--panel-solid);
+    color: var(--texto);
+    border: 1px solid rgba(94, 227, 238, 0.35);
+}
+
+select option,
+.form-select option {
+    background-color: var(--panel-solid);
+    color: var(--texto);
+}
+
+select:focus,
+.form-select:focus {
+    background-color: var(--panel-solid);
+    color: var(--texto);
+    border-color: var(--cian);
+    box-shadow: 0 0 0 0.2rem rgba(94, 227, 238, 0.25);
 }

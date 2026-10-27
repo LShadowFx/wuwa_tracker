@@ -71,7 +71,6 @@
     </div>
 
     <script>
-        // Menu movil
         (function () {
             var boton = document.getElementById('navToggle');
             var menu = document.getElementById('navMenu');
@@ -85,7 +84,6 @@
             });
         })();
 
-        // Particulas flotantes de fondo (se desactivan si el usuario prefiere menos movimiento)
         (function () {
             var c = document.getElementById('polvo');
             if (!c || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
