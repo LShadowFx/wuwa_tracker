@@ -18,7 +18,7 @@
     {# Sin item destacado: mostramos un collage con los primeros 4 items del banner #}
     <div class="hero-collage" aria-hidden="true">
         {% for item in banner.items.all|slice:":4" %}
-        <img src="{{ item.imagen.url }}" alt="" class="hero-collage-item hero-collage-item--{{ forloop.counter0 }}">
+        <img src="{{ item.imagen.url }}" alt="" style="--n:{{ forloop.counter0 }}">
         {% endfor %}
     </div>
     {% endif %}
