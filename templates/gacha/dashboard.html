@@ -1,54 +1,95 @@
 {% extends "plantilla.html" %}
-{% block titulo %}Resultado{% endblock %}
+{% block titulo %}Mi dashboard{% endblock %}
 
 {% block contenido %}
-<section
-    class="banner-hero banner-hero--{{ banner.tipo }}"
-    style="{{ banner.imagen_fondo_css }}"
->
-    <div class="banner-hero-overlay"></div>
-    <div class="banner-hero-contenido text-center">
-        <span class="badge-tipo">{{ banner.get_tipo_display }}</span>
-        <h2>{{ banner.nombre }}</h2>
-        <p class="banner-desc mx-auto">{{ cantidad }} tirada{{ cantidad|pluralize }} realizadas</p>
-    </div>
-</section>
+<header class="cabecera-pagina">
+    <span class="etiqueta">Resonador · {{ user.username }}</span>
+    <h1>Mi dashboard</h1>
+    <p>Tu pity actual en cada banner y el historial de tus últimos 4&#9733; y 5&#9733;.</p>
+</header>
 
-{% if tiradas %}
-<div class="row row-cols-2 row-cols-md-5 g-3 mb-4">
-    {% for tirada in tiradas %}
-    <div class="col">
-        <div class="pull-card h-100 {% if tirada.item.rareza == 5 %}rareza-5{% else %}rareza-4{% endif %}">
-            <img src="{{ tirada.item.imagen.url }}" alt="{{ tirada.item.nombre }}">
-            <div class="p-2 text-center">
-                <div class="small fw-bold">{{ tirada.item.nombre }}</div>
-                <div class="small {% if tirada.item.rareza == 5 %}text-estrella-5{% else %}text-secondary{% endif %}">
-                    {{ tirada.item.rareza }}&#9733;
-                </div>
-                <div class="small text-muted">pity {{ tirada.pity_en_momento }}</div>
-                {% if tirada.gano_50_50 == False %}
-                <div class="badge text-bg-secondary mt-1">Perdiste el 50/50</div>
-                {% elif tirada.gano_50_50 == True %}
-                <div class="badge text-bg-success mt-1">Ganaste el 50/50</div>
-                {% endif %}
+<h2 class="titulo-seccion" style="margin-top:.5rem">Pity actual</h2>
 
-                {% if not tirada.compartida %}
-                <form action="{% url 'gacha:compartir' tirada.id %}" method="post" class="mt-2">
-                    {% csrf_token %}
-                    <button class="btn btn-sm btn-outline-info w-100">Compartir</button>
-                </form>
-                {% else %}
-                <span class="badge text-bg-info mt-2">Compartida</span>
-                {% endif %}
-            </div>
+{% if estados %}
+<div class="pity-grid">
+    {% for estado in estados %}
+    <article class="pity-card pity-card--{{ estado.banner.tipo }}">
+        <div class="anillo {% if estado.pity_actual >= 60 %}anillo--soft{% endif %}" style="--pct:{{ estado.porcentaje_pity }}">
+            <div class="anillo-num">{{ estado.pity_actual }}<small>/ 80</small></div>
         </div>
-    </div>
+        <div>
+            <span class="etiqueta">{{ estado.banner.get_tipo_display }}</span>
+            <h3>{{ estado.banner.nombre }}</h3>
+
+            <div class="linea-dato"><span>Pity 4&#9733;</span><span>{{ estado.pity_4_actual }} / 10</span></div>
+            <div class="barra-cuatro"><span style="width:{% widthratio estado.pity_4_actual 10 100 %}%"></span></div>
+
+            {% if estado.banner.tipo == 'personaje' %}
+            {% if estado.garantizado %}
+            <span class="sello sello--gana">5&#9733; garantizado</span>
+            {% else %}
+            <span class="sello sello--ok">Próximo 5&#9733;: 50/50</span>
+            {% endif %}
+            {% endif %}
+            {% if estado.pity_actual >= 60 %}
+            <span class="sello" style="color:var(--oro)">Soft pity activo</span>
+            {% endif %}
+        </div>
+    </article>
     {% endfor %}
 </div>
 {% else %}
-<p>Esta vez no obtuviste ningún 4&#9733; ni 5&#9733; (igual cuentan para tu pity, revisa tu dashboard).</p>
+<div class="vacio">Todavía no has tirado en ningún banner. <a href="{% url 'gacha:catalogo' %}">Ir a los banners</a></div>
 {% endif %}
 
-<a href="{% url 'gacha:catalogo' %}" class="btn btn-outline-secondary">Volver a los banners</a>
-<a href="{% url 'gacha:dashboard' %}" class="btn btn-info">Ver mi dashboard</a>
+<h2 class="titulo-seccion">Historial</h2>
+
+{% if historial %}
+<div class="tabla-wrap">
+    <table class="tabla-historial">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Rareza</th>
+                <th>Banner</th>
+                <th>Pity</th>
+                <th>50/50</th>
+                <th>Fecha</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in historial %}
+            <tr class="{% if t.item.rareza == 5 %}fila-5{% endif %}">
+                <td>
+                    <img class="thumb" src="{{ t.item.imagen.url }}" alt="">
+                    <span class="nombre-item">{{ t.item.nombre }}</span>
+                </td>
+                <td><span class="estrellas estrellas--{{ t.item.rareza }}">{% if t.item.rareza == 5 %}&#9733;&#9733;&#9733;&#9733;&#9733;{% else %}&#9733;&#9733;&#9733;&#9733;{% endif %}</span></td>
+                <td class="apagado">{{ t.banner.nombre }}</td>
+                <td>{{ t.pity_en_momento }}</td>
+                <td>
+                    {% if t.gano_50_50 == True %}<span class="sello sello--gana" style="margin:0">Ganado</span>
+                    {% elif t.gano_50_50 == False %}<span class="sello sello--pierde" style="margin:0">Perdido</span>
+                    {% else %}<span class="apagado">—</span>{% endif %}
+                </td>
+                <td class="apagado">{{ t.fecha|date:"d/m/Y H:i" }}</td>
+                <td>
+                    {% if t.compartida %}
+                    <span class="sello sello--ok" style="margin:0">Compartida</span>
+                    {% else %}
+                    <form action="{% url 'gacha:compartir' t.id %}" method="post" style="margin:0">
+                        {% csrf_token %}
+                        <button class="btn-w btn-w--fantasma btn-w--sm">Compartir</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="vacio">Tu historial está vacío. Haz tu primera tirada desde los banners.</div>
+{% endif %}
 {% endblock %}

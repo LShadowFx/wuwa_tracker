@@ -2,61 +2,84 @@
 {% block titulo %}Banners{% endblock %}
 
 {% block contenido %}
-<h1 class="h3 fw-bold mb-1">Banners</h1>
-<p class="text-secondary mb-4">Desliza hacia abajo para ver los 3 banners disponibles. Tira directo desde cada uno.</p>
+<header class="cabecera-pagina">
+    <span class="etiqueta">Convocación</span>
+    <h1>Banners</h1>
+    <p>Desliza hacia abajo para ver los {{ banners|length }} banners disponibles. Tira directo desde cada uno.</p>
+</header>
 
 {% for banner in banners %}
-<section
-    class="banner-hero banner-hero--{{ banner.tipo }}"
-    style="{{ banner.imagen_fondo_css }}"
->
+{% with destacado=banner.item_destacado %}
+<section class="banner-hero banner-hero--{{ banner.tipo }}">
     <div class="banner-hero-overlay"></div>
+    <div class="banner-num">{{ forloop.counter|stringformat:"02d" }}</div>
+
+    {% if banner.tipo == 'permanente' %}
+    {# Sin item destacado: mostramos un collage con los primeros 4 items del banner #}
+    <div class="hero-collage" aria-hidden="true">
+        {% for item in banner.items.all|slice:":4" %}
+        <img src="{{ item.imagen.url }}" alt="" style="--n:{{ forloop.counter0 }}">
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="banner-hero-contenido">
         <span class="badge-tipo">{{ banner.get_tipo_display }}</span>
         <h2>{{ banner.nombre }}</h2>
         <p class="banner-desc">{{ banner.descripcion }}</p>
 
-        {% if banner.item_destacado %}
+        {% if destacado %}
         <div class="destacado-pill">
-            <i class="bi bi-star-fill"></i> Destacado: {{ banner.item_destacado.nombre }} ({{ banner.item_destacado.rareza }}&#9733;)
+            <img src="{{ destacado.imagen.url }}" alt="">
+            <span>Destacado: {{ destacado.nombre }} ({{ destacado.rareza }}&#9733;)</span>
         </div>
         {% endif %}
 
         <div class="pull-actions">
             {% if user.is_authenticated %}
-            <form method="post" action="{% url 'gacha:simular' %}" class="d-inline">
+            <form method="post" action="{% url 'gacha:simular' %}">
                 {% csrf_token %}
                 <input type="hidden" name="banner" value="{{ banner.id }}">
                 <input type="hidden" name="cantidad" value="1">
-                <button type="submit" class="btn-pull">Tirar x1</button>
+                <button type="submit" class="btn-w btn-w--cian">Tirar x1</button>
             </form>
-            <form method="post" action="{% url 'gacha:simular' %}" class="d-inline">
+            <form method="post" action="{% url 'gacha:simular' %}">
                 {% csrf_token %}
                 <input type="hidden" name="banner" value="{{ banner.id }}">
                 <input type="hidden" name="cantidad" value="10">
-                <button type="submit" class="btn-pull btn-pull-x10">Tirar x10</button>
+                <button type="submit" class="btn-w btn-w--oro">Tirar x10</button>
             </form>
             {% else %}
-            <a href="{% url 'cuentas:login' %}" class="btn-pull-locked">
-                <i class="bi bi-lock-fill"></i> Inicia sesión para tirar
-            </a>
+            <a href="{% url 'cuentas:login' %}" class="btn-w btn-w--fantasma">&#128274; Inicia sesión para tirar</a>
             {% endif %}
         </div>
     </div>
 </section>
 
-<div class="item-roster mb-5">
-    {% for item in banner.items.all %}
-    <div class="item-chip {% if item.es_destacado %}es-destacado{% endif %}">
-        <img src="{{ item.imagen.url }}" alt="{{ item.nombre }}">
-        <div class="item-nombre">{{ item.nombre }}</div>
-        <div class="small {% if item.rareza == 5 %}text-estrella-5{% else %}text-secondary{% endif %}">
-            {{ item.rareza }}&#9733;
+<div class="roster">
+    {# Ordenamos de mayor a menor rareza y agrupamos para mostrar 5★ y 4★ por separado #}
+    {% regroup banner.items.all|dictsortreversed:"rareza" by rareza as grupos %}
+    {% for grupo in grupos %}
+    <div class="roster-etiqueta">
+        <span class="{% if grupo.grouper == 5 %}e5{% else %}e4{% endif %}">
+            {% if grupo.grouper == 5 %}&#9733;&#9733;&#9733;&#9733;&#9733;{% else %}&#9733;&#9733;&#9733;&#9733;{% endif %}
+        </span>
+    </div>
+    <div class="roster-grid">
+        {% for item in grupo.list %}
+        <div class="eco eco--{{ item.rareza }} {% if item.es_destacado %}es-destacado{% endif %}">
+            <div class="eco-arte"><img src="{{ item.imagen.url }}" alt="{{ item.nombre }}" loading="lazy"></div>
+            <div class="eco-info">
+                <div class="eco-nombre">{{ item.nombre }}</div>
+                <div class="estrellas estrellas--{{ item.rareza }}">{{ item.get_categoria_display }}</div>
+            </div>
         </div>
+        {% endfor %}
     </div>
     {% endfor %}
 </div>
+{% endwith %}
 {% empty %}
-<p>No hay banners cargados todavía. Carga el fixture con <code>loaddata</code>.</p>
+<div class="vacio">No hay banners cargados todavía. Carga el fixture con <code>loaddata</code>.</div>
 {% endfor %}
 {% endblock %}
