@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block titulo %}{{ item.nombre }}{% endblock %}
+
+{% block contenido %}
+<p class="migas"><a href="{% url 'gacha:catalogo' %}">&larr; Volver al catálogo</a></p>
+
+<section class="detalle">
+    <div class="detalle-arte detalle-arte--{{ item.rareza }}">
+        <img src="{{ item.imagen.url }}" alt="{{ item.nombre }}">
+    </div>
+
+    <div class="detalle-panel">
+        <span class="etiqueta">{{ item.get_categoria_display }}</span>
+        <h1>{{ item.nombre }}</h1>
+        <div class="estrellas estrellas--{{ item.rareza }} detalle-estrellas">{% include "includes/estrellas.html" with rareza=item.rareza %}</div>
+
+        {% if item.es_destacado %}
+        <span class="sello sello--gana" style="margin-top:.8rem">Destacado (rate-up) de su banner</span>
+        {% endif %}
+
+        <dl class="datos">
+            <div><dt>Categoría</dt><dd>{{ item.get_categoria_display }}</dd></div>
+            <div><dt>Rareza</dt><dd>{{ item.rareza }} estrellas</dd></div>
+            <div><dt>Banner</dt><dd><a href="{% url 'gacha:banner_detalle' item.banner.id %}">{{ item.banner.nombre }}</a> ({{ item.banner.get_tipo_display }})</dd></div>
+            <div><dt>Veces obtenido (todos los usuarios)</dt><dd>{{ veces_obtenido }}</dd></div>
+            {% if mis_copias is not None %}
+            <div><dt>Veces obtenido por ti</dt><dd>{{ mis_copias }}</dd></div>
+            {% endif %}
+        </dl>
+
+        <div class="pull-actions">
+            <a href="{% url 'gacha:banner_detalle' item.banner.id %}" class="btn-w btn-w--cian">Ver banner</a>
+            <a href="{% url 'gacha:catalogo' %}" class="btn-w btn-w--fantasma">Volver al catálogo</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

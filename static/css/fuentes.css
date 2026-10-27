@@ -1,0 +1,8 @@
+/* Fuentes locales (Rajdhani y Noto Sans, licencia OFL, via @fontsource).
+   Reemplazan a Google Fonts para que la app funcione sin internet. */
+@font-face { font-family: 'Rajdhani'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/rajdhani-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Rajdhani'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/rajdhani-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Rajdhani'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/rajdhani-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Noto Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/noto-sans-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Noto Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/noto-sans-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Noto Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/noto-sans-latin-600-normal.woff2') format('woff2'); }

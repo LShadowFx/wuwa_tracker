@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block titulo %}Crear personaje{% endblock %}
+
+{% block contenido %}
+<div class="auth-fondo">
+    <div class="auth-panel auth-panel--ancho">
+        <span class="etiqueta">Catálogo</span>
+        <h1>Crear personaje</h1>
+        <p class="sub">Agrega un personaje o arma. Al guardarlo aparece en el catálogo y en su banner.</p>
+        {# enctype multipart: necesario para subir la imagen. novalidate: la validacion real se hace en el servidor. #}
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button type="submit" class="btn-w btn-w--cian btn-w--block" style="margin-top:.6rem">Guardar</button>
+            <a href="{% url 'gacha:catalogo' %}" class="btn-w btn-w--fantasma btn-w--block" style="margin-top:.6rem">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

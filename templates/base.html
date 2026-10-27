@@ -1,0 +1,33 @@
+{% load static %}
+{# Template maestro: todas las paginas lo extienden y solo rellenan los bloques. #}
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Inicio{% endblock %} | WuWa Tracker</title>
+    {% include "includes/head_recursos.html" %}
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <canvas id="polvo" aria-hidden="true"></canvas>
+
+    <div class="contenido-pagina">
+        {% include "includes/navbar.html" %}
+
+        <main class="wrap">
+            {% include "includes/mensajes.html" %}
+            {% block contenido %}{% endblock %}
+        </main>
+
+        {% include "includes/footer.html" %}
+    </div>
+
+    <script src="{% static 'js/navbar.js' %}"></script>
+    <script src="{% static 'js/polvo.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

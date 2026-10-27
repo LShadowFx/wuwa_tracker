@@ -1,11 +1,11 @@
-{% extends "plantilla.html" %}
+{% extends "base.html" %}
 {% block titulo %}Mi dashboard{% endblock %}
 
 {% block contenido %}
 <header class="cabecera-pagina">
     <span class="etiqueta">Resonador · {{ user.username }}</span>
     <h1>Mi dashboard</h1>
-    <p>Tu pity actual en cada banner y el historial de tus últimos 4&#9733; y 5&#9733;.</p>
+    <p>Tu pity actual en cada banner y tus últimas {{ limite }} tiradas de 4&#9733; y 5&#9733;.</p>
     <a href="{% url 'gacha:simular' %}" class="btn-w btn-w--cian" style="margin-top:.8rem">Simular tiradas</a>
 </header>
 
@@ -40,10 +40,13 @@
     {% endfor %}
 </div>
 {% else %}
-<div class="vacio">Todavía no has tirado en ningún banner. <a href="{% url 'gacha:catalogo' %}">Ir a los banners</a></div>
+<div class="vacio">Todavía no has tirado en ningún banner. <a href="{% url 'gacha:banners' %}">Ir a los banners</a></div>
 {% endif %}
 
-<h2 class="titulo-seccion">Historial</h2>
+<h2 class="titulo-seccion">Últimas tiradas</h2>
+{% if total_tiradas > limite %}
+<p class="apagado nota-historial">Mostrando las {{ limite }} más recientes de {{ total_tiradas }} tiradas guardadas.</p>
+{% endif %}
 
 {% if historial %}
 <div class="tabla-wrap">
@@ -64,9 +67,9 @@
             <tr class="{% if t.item.rareza == 5 %}fila-5{% endif %}">
                 <td>
                     <img class="thumb" src="{{ t.item.imagen.url }}" alt="">
-                    <span class="nombre-item">{{ t.item.nombre }}</span>
+                    <a class="nombre-item" href="{% url 'gacha:item_detalle' t.item.id %}">{{ t.item.nombre }}</a>
                 </td>
-                <td><span class="estrellas estrellas--{{ t.item.rareza }}">{% if t.item.rareza == 5 %}&#9733;&#9733;&#9733;&#9733;&#9733;{% else %}&#9733;&#9733;&#9733;&#9733;{% endif %}</span></td>
+                <td><span class="estrellas estrellas--{{ t.item.rareza }}">{% include "includes/estrellas.html" with rareza=t.item.rareza %}</span></td>
                 <td class="apagado">{{ t.banner.nombre }}</td>
                 <td>{{ t.pity_en_momento }}</td>
                 <td>

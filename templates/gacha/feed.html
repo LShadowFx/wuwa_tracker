@@ -1,4 +1,4 @@
-{% extends "plantilla.html" %}
+{% extends "base.html" %}
 {% block titulo %}Feed público{% endblock %}
 
 {% block contenido %}
@@ -14,10 +14,10 @@
     <article class="pull pull--{{ tirada.item.rareza }}" style="--i:{{ forloop.counter0 }}">
         <div class="pull-arte">
             <img src="{{ tirada.item.imagen.url }}" alt="{{ tirada.item.nombre }}" loading="lazy">
-            <span class="pull-estrellas">{% if tirada.item.rareza == 5 %}&#9733;&#9733;&#9733;&#9733;&#9733;{% else %}&#9733;&#9733;&#9733;&#9733;{% endif %}</span>
+            <span class="pull-estrellas">{% include "includes/estrellas.html" with rareza=tirada.item.rareza %}</span>
         </div>
         <div class="pull-cuerpo">
-            <div class="pull-nombre">{{ tirada.item.nombre }}</div>
+            <div class="pull-nombre"><a href="{% url 'gacha:item_detalle' tirada.item.id %}">{{ tirada.item.nombre }}</a></div>
             <div class="pull-meta">{{ tirada.banner.nombre }}</div>
             <div class="pull-meta">pity {{ tirada.pity_en_momento }} · hace {{ tirada.fecha|timesince }}</div>
         </div>

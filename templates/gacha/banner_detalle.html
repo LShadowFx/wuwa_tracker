@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}{{ banner.nombre }}{% endblock %}
+
+{% block contenido %}
+<p class="migas" style="margin-top:1.6rem"><a href="{% url 'gacha:banners' %}">&larr; Todos los banners</a></p>
+
+{% include "includes/banner_hero.html" with compacto=False %}
+
+<div class="roster">
+    {# Ordenamos de mayor a menor rareza y agrupamos para mostrar 5★ y 4★ por separado #}
+    {% regroup banner.items.all|dictsortreversed:"rareza" by rareza as grupos %}
+    {% for grupo in grupos %}
+    <div class="roster-etiqueta">
+        <span class="{% if grupo.grouper == 5 %}e5{% else %}e4{% endif %}">
+            {% include "includes/estrellas.html" with rareza=grupo.grouper %}
+        </span>
+    </div>
+    <div class="roster-grid">
+        {% for item in grupo.list %}
+        {% include "includes/tarjeta_item.html" %}
+        {% endfor %}
+    </div>
+    {% empty %}
+    <div class="vacio">Este banner todavía no tiene items.</div>
+    {% endfor %}
+</div>
+{% endblock %}

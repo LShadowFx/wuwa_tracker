@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titulo %}Banners{% endblock %}
+
+{% block contenido %}
+<header class="cabecera-pagina">
+    <span class="etiqueta">Convocación</span>
+    <h1>Banners</h1>
+    <p>Hay {{ banners|length }} banner{{ banners|length|pluralize:"s" }} disponible{{ banners|length|pluralize:"s" }}. Entra a uno para ver su plantel y tirar.</p>
+</header>
+
+{% for banner in banners %}
+{% include "includes/banner_hero.html" with compacto=True numero=forloop.counter %}
+{% empty %}
+<div class="vacio">No hay banners cargados todavía. Carga el fixture con <code>loaddata</code>.</div>
+{% endfor %}
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "plantilla.html" %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block titulo %}Iniciar sesión{% endblock %}
 
@@ -14,6 +14,7 @@
         <p class="sub">Usa una de las cuentas de prueba del README.</p>
         <form method="post">
             {% csrf_token %}
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
             {{ form | crispy }}
             <button type="submit" class="btn-w btn-w--cian btn-w--block" style="margin-top:.6rem">Entrar</button>
         </form>

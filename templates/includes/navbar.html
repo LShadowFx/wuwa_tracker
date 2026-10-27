@@ -1,0 +1,36 @@
+<nav class="nav-wuwa">
+    <div class="wrap nav-inner">
+        <a class="marca" href="{% url 'gacha:catalogo' %}">
+            <svg viewBox="0 0 32 32" fill="none" stroke="#5ee3ee" stroke-width="1.8" aria-hidden="true">
+                <path d="M16 2 28 9v14L16 30 4 23V9z" />
+                <path d="M8 17c3-6 5-6 8 0s5 6 8 0" stroke-linecap="round" />
+            </svg>
+            WuWa <b>Tracker</b>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-label="Abrir menu" id="navToggle">&#9776;</button>
+
+        <div class="nav-menu" id="navMenu">
+            <div class="nav-links">
+                <a class="nav-link-w" href="{% url 'gacha:catalogo' %}">Catálogo</a>
+                <a class="nav-link-w" href="{% url 'gacha:banners' %}">Banners</a>
+                <a class="nav-link-w" href="{% url 'gacha:feed' %}">Feed público</a>
+                {% if user.is_authenticated %}
+                <a class="nav-link-w" href="{% url 'gacha:item_crear' %}">Crear personaje</a>
+                <a class="nav-link-w" href="{% url 'gacha:dashboard' %}">Mi dashboard</a>
+                {% endif %}
+            </div>
+            <div class="nav-usuario">
+                {% if user.is_authenticated %}
+                <span class="chip-usuario"><i>{{ user.username|slice:":1"|upper }}</i>{{ user.username }}</span>
+                <form action="{% url 'cuentas:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-w btn-w--fantasma btn-w--sm">Cerrar sesión</button>
+                </form>
+                {% else %}
+                <a class="btn-w btn-w--cian btn-w--sm" href="{% url 'cuentas:login' %}">Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

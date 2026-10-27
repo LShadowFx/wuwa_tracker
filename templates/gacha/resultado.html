@@ -1,4 +1,5 @@
-{% extends "plantilla.html" %}
+{% extends "base.html" %}
+{% load static %}
 {% block titulo %}Resultado{% endblock %}
 
 {% block contenido %}
@@ -20,7 +21,7 @@
         <article class="pull pull--{{ tirada.item.rareza }}" style="--i:{{ forloop.counter0 }}">
             <div class="pull-arte">
                 <img src="{{ tirada.item.imagen.url }}" alt="{{ tirada.item.nombre }}">
-                <span class="pull-estrellas">{% if tirada.item.rareza == 5 %}&#9733;&#9733;&#9733;&#9733;&#9733;{% else %}&#9733;&#9733;&#9733;&#9733;{% endif %}</span>
+                <span class="pull-estrellas">{% include "includes/estrellas.html" with rareza=tirada.item.rareza %}</span>
             </div>
             <div class="pull-cuerpo">
                 <div class="pull-nombre">{{ tirada.item.nombre }}</div>
@@ -49,23 +50,12 @@
     {% endif %}
 
     <div class="acciones-fin">
-        <a href="{% url 'gacha:catalogo' %}" class="btn-w btn-w--fantasma">Volver a los banners</a>
+        <a href="{% url 'gacha:banner_detalle' banner.id %}" class="btn-w btn-w--fantasma">Volver al banner</a>
         <a href="{% url 'gacha:dashboard' %}" class="btn-w btn-w--cian">Ver mi dashboard</a>
     </div>
 </section>
+{% endblock %}
 
-<script>
-    // Las tiradas de 3 estrellas no se guardan en la base de datos, asi que
-    // las calculamos aqui: total pedido - cartas de 4/5 estrellas mostradas.
-    (function () {
-        var total = parseInt(document.querySelector('[data-total]').dataset.total, 10) || 0;
-        var vistas = document.querySelectorAll('.pull').length;
-        var tres = total - vistas;
-        var el = document.getElementById('tres-estrellas');
-        if (tres > 0) {
-            el.textContent = '+ ' + tres + ' tirada' + (tres > 1 ? 's' : '') + ' de 3\u2605 (cuentan para tu pity)';
-            el.hidden = false;
-        }
-    })();
-</script>
+{% block scripts %}
+<script src="{% static 'js/resultado.js' %}"></script>
 {% endblock %}

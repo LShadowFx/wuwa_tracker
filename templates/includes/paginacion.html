@@ -1,0 +1,12 @@
+{# Parametros: pagina (objeto Page), querystring (filtros activos, sin "page"). #}
+{% if pagina.paginator.num_pages > 1 %}
+<nav class="paginacion" aria-label="Paginación">
+    {% if pagina.has_previous %}
+    <a class="btn-w btn-w--fantasma btn-w--sm" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ pagina.previous_page_number }}">&larr; Anterior</a>
+    {% endif %}
+    <span class="paginacion-info">Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+    {% if pagina.has_next %}
+    <a class="btn-w btn-w--fantasma btn-w--sm" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ pagina.next_page_number }}">Siguiente &rarr;</a>
+    {% endif %}
+</nav>
+{% endif %}
