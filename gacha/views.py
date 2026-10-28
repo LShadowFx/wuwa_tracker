@@ -47,8 +47,8 @@ def catalogo(request):
     })
 
 
-def item_detalle(request, item_id):
-    item = get_object_or_404(Item.objects.select_related('banner'), id=item_id)
+def item_detalle(request, slug):
+    item = get_object_or_404(Item.objects.select_related('banner'), slug=slug)
     veces_obtenido = Tirada.objects.filter(item=item).count()
     mis_copias = None
     if request.user.is_authenticated:
@@ -67,7 +67,7 @@ def item_crear(request):
         if form.is_valid():
             item = form.save()
             messages.success(request, f'Se creó «{item.nombre}» y ya aparece en el catálogo.')
-            return redirect('gacha:item_detalle', item_id=item.id)
+            return redirect('gacha:item_detalle', slug=item.slug)
         messages.error(request, 'No se pudo guardar. Revisa los campos marcados.')
     else:
         form = ItemForm()

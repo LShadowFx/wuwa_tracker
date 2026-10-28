@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 TIPO_BANNER = [
     ('personaje', 'Personaje limitado'),
@@ -42,6 +43,7 @@ class Banner(models.Model):
 class Item(models.Model):
     nombre = models.CharField(max_length=100)
     categoria = models.CharField(max_length=20, choices=CATEGORIA_ITEM)
+    slug = models.SlugField(max_length=120, blank=True, default='')
     rareza = models.IntegerField(choices=RAREZA)
     imagen = models.ImageField(default='sin_imagen.jpg', blank=True)
     descripcion = models.TextField(blank=True)
@@ -57,6 +59,17 @@ class Item(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.nombre) or 'item'
+            slug = base
+            numero = 1
+            while Item.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f'{base}-{numero}'
+                numero += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class EstadoPity(models.Model):

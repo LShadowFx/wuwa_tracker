@@ -67,7 +67,7 @@
             <tr class="{% if t.item.rareza == 5 %}fila-5{% endif %}">
                 <td>
                     <img class="thumb" src="{{ t.item.imagen.url }}" alt="">
-                    <a class="nombre-item" href="{% url 'gacha:item_detalle' t.item.id %}">{{ t.item.nombre }}</a>
+                    <a class="nombre-item" href="{% url 'gacha:item_detalle' t.item.slug %}">{{ t.item.nombre }}</a>
                 </td>
                 <td><span class="estrellas estrellas--{{ t.item.rareza }}">{% include "includes/estrellas.html" with rareza=t.item.rareza %}</span></td>
                 <td class="apagado">{{ t.banner.nombre }}</td>

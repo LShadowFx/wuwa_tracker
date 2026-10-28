@@ -7,7 +7,7 @@ urlpatterns = [
     # Catalogo (publico)
     path('', views.catalogo, name='catalogo'),
     path('items/nuevo/', views.item_crear, name='item_crear'),
-    path('items/<int:item_id>/', views.item_detalle, name='item_detalle'),
+    path('items/<slug:slug>/', views.item_detalle, name='item_detalle'),
     path('banners/', views.banners, name='banners'),
     path('banners/<int:banner_id>/', views.banner_detalle, name='banner_detalle'),
     path('feed/', views.feed_publico, name='feed'),

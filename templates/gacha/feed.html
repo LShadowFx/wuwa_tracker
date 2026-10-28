@@ -17,7 +17,7 @@
             <span class="pull-estrellas">{% include "includes/estrellas.html" with rareza=tirada.item.rareza %}</span>
         </div>
         <div class="pull-cuerpo">
-            <div class="pull-nombre"><a href="{% url 'gacha:item_detalle' tirada.item.id %}">{{ tirada.item.nombre }}</a></div>
+            <div class="pull-nombre"><a href="{% url 'gacha:item_detalle' tirada.item.slug %}">{{ tirada.item.nombre }}</a></div>
             <div class="pull-meta">{{ tirada.banner.nombre }}</div>
             <div class="pull-meta">pity {{ tirada.pity_en_momento }} · hace {{ tirada.fecha|timesince }}</div>
         </div>

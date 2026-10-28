@@ -1,6 +1,6 @@
 {# Tarjeta compacta de un item. Parametros: item, mostrar_banner (opcional). Lleva al detalle. #}
 <a class="eco eco--{{ item.rareza }}{% if item.es_destacado %} es-destacado{% endif %}"
-   href="{% url 'gacha:item_detalle' item.id %}" title="Ver detalle de {{ item.nombre }}">
+   href="{% url 'gacha:item_detalle' item.slug %}" title="Ver detalle de {{ item.nombre }}">
     <div class="eco-arte"><img src="{{ item.imagen.url }}" alt="{{ item.nombre }}" loading="lazy"></div>
     <div class="eco-info">
         <div class="eco-nombre">{{ item.nombre }}</div>
