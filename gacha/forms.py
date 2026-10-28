@@ -35,21 +35,26 @@ class ItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ['nombre', 'categoria', 'rareza', 'banner', 'imagen', 'es_destacado']
+        fields = ['nombre', 'categoria', 'rareza', 'banner', 'imagen', 'ataque_base', 'descripcion', 'es_destacado']
         labels = {
             'nombre': 'Nombre',
             'categoria': 'Categoría',
             'rareza': 'Rareza',
             'banner': 'Banner',
             'imagen': 'Imagen',
+            'ataque_base': 'Ataque base (nivel 90)',
+            'descripcion': 'Descripción',
             'es_destacado': 'Item destacado (rate-up)',
         }
         help_texts = {
             'imagen': 'Opcional. JPG, PNG o WEBP de hasta 2 MB. Si no subes nada se usa una imagen genérica.',
+            'ataque_base': 'Opcional. Número entero entre 100 y 800 (ATK a nivel 90, sin arma ni ecos en personajes).',
+            'descripcion': 'Opcional. Entre 10 y 600 caracteres: rol, elemento, tipo de arma, etc.',
             'es_destacado': 'Solo un 5 estrellas puede serlo, y cada banner limitado tiene uno solo.',
         }
         widgets = {
             'imagen': forms.FileInput(attrs={'accept': 'image/png,image/jpeg,image/webp'}),
+            'descripcion': forms.Textarea(attrs={'rows': 4}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -77,6 +82,24 @@ class ItemForm(forms.ModelForm):
             if imagen.size > TAMANO_MAXIMO_IMAGEN:
                 raise forms.ValidationError('La imagen pesa más de 2 MB. Sube una más liviana.')
         return imagen
+
+    def clean_ataque_base(self):
+        ataque = self.cleaned_data.get('ataque_base')
+        # Es opcional: solo se revisa si se escribio algo.
+        if ataque is not None and not (100 <= ataque <= 800):
+            raise forms.ValidationError('El ataque base debe estar entre 100 y 800.')
+        return ataque
+
+    def clean_descripcion(self):
+        descripcion = self.cleaned_data.get('descripcion', '').strip()
+        # Es opcional: solo se revisa si se escribio algo.
+        if descripcion and len(descripcion) < 10:
+            raise forms.ValidationError('Si escribes una descripción, usa al menos 10 caracteres.')
+        if len(descripcion) > 600:
+            raise forms.ValidationError(
+                f'La descripción tiene {len(descripcion)} caracteres; el máximo es 600.'
+            )
+        return descripcion
 
     # ---- reglas del negocio que cruzan varios campos ----
     def clean(self):

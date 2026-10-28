@@ -19,7 +19,6 @@ RAREZA = [
 
 
 class Banner(models.Model):
-    """Un banner de Wuthering Waves."""
     nombre = models.CharField(max_length=100)
     tipo = models.CharField(max_length=20, choices=TIPO_BANNER)
     descripcion = models.TextField(blank=True)
@@ -45,6 +44,11 @@ class Item(models.Model):
     categoria = models.CharField(max_length=20, choices=CATEGORIA_ITEM)
     rareza = models.IntegerField(choices=RAREZA)
     imagen = models.ImageField(default='sin_imagen.jpg', blank=True)
+    descripcion = models.TextField(blank=True)
+    ataque_base = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text='ATK base a nivel 90 (personajes: sin arma ni ecos).',
+    )
     es_destacado = models.BooleanField(
         default=False,
         help_text='Marca si es el item destacado (rate-up) de su banner.',

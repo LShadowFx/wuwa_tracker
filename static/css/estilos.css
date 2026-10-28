@@ -1653,6 +1653,12 @@ a.eco:hover .eco-ver {
     font-size: 1.2rem;
 }
 
+.detalle-descripcion {
+    margin: 1.1rem 0 0;
+    line-height: 1.7;
+    color: var(--texto);
+}
+
 .datos {
     margin: 1.4rem 0 0;
     border-top: 1px solid var(--line);

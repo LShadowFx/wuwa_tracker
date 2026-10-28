@@ -18,9 +18,15 @@
         <span class="sello sello--gana" style="margin-top:.8rem">Destacado (rate-up) de su banner</span>
         {% endif %}
 
+        {% if item.descripcion %}
+        <p class="detalle-descripcion">{{ item.descripcion|linebreaksbr }}</p>
+        {% endif %}
         <dl class="datos">
             <div><dt>Categoría</dt><dd>{{ item.get_categoria_display }}</dd></div>
             <div><dt>Rareza</dt><dd>{{ item.rareza }} estrellas</dd></div>
+            {% if item.ataque_base %}
+            <div><dt>Ataque base (nivel 90)</dt><dd>{{ item.ataque_base }}</dd></div>
+            {% endif %}
             <div><dt>Banner</dt><dd><a href="{% url 'gacha:banner_detalle' item.banner.id %}">{{ item.banner.nombre }}</a> ({{ item.banner.get_tipo_display }})</dd></div>
             <div><dt>Veces obtenido (todos los usuarios)</dt><dd>{{ veces_obtenido }}</dd></div>
             {% if mis_copias is not None %}
