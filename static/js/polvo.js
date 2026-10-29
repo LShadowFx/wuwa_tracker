@@ -1,4 +1,3 @@
-// Particulas de polvo del fondo (canvas#polvo). Se desactiva si el usuario prefiere menos movimiento.
 (function () {
     var c = document.getElementById('polvo');
     if (!c || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;

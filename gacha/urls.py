@@ -4,7 +4,6 @@ from . import views
 app_name = 'gacha'
 
 urlpatterns = [
-    # Catalogo (publico)
     path('', views.catalogo, name='catalogo'),
     path('items/nuevo/', views.item_crear, name='item_crear'),
     path('items/<slug:slug>/', views.item_detalle, name='item_detalle'),

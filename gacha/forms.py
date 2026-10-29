@@ -9,7 +9,7 @@ CANTIDAD_CHOICES = [
 ]
 
 EXTENSIONES_IMAGEN = ('.jpg', '.jpeg', '.png', '.webp')
-TAMANO_MAXIMO_IMAGEN = 2 * 1024 * 1024  # 2 MB
+TAMANO_MAXIMO_IMAGEN = 2 * 1024 * 1024 
 
 
 class SimularTiradaForm(forms.Form):
@@ -63,7 +63,6 @@ class ItemForm(forms.ModelForm):
         self.fields['categoria'].choices = [('', 'Selecciona una categoría')] + list(CATEGORIA_ITEM)
         self.fields['rareza'].choices = [('', 'Selecciona la rareza'), (4, '4 estrellas'), (5, '5 estrellas')]
 
-    # ---- validaciones de un solo campo ----
     def clean_nombre(self):
         nombre = ' '.join(self.cleaned_data['nombre'].split())
         if len(nombre) < 2:
@@ -75,7 +74,6 @@ class ItemForm(forms.ModelForm):
 
     def clean_imagen(self):
         imagen = self.cleaned_data.get('imagen')
-        # Solo se revisa cuando realmente se subio un archivo (si no, queda la imagen por defecto).
         if isinstance(imagen, UploadedFile):
             if not imagen.name.lower().endswith(EXTENSIONES_IMAGEN):
                 raise forms.ValidationError('Formato no permitido: usa JPG, PNG o WEBP.')
@@ -85,14 +83,12 @@ class ItemForm(forms.ModelForm):
 
     def clean_ataque_base(self):
         ataque = self.cleaned_data.get('ataque_base')
-        # Es opcional: solo se revisa si se escribio algo.
         if ataque is not None and not (100 <= ataque <= 800):
             raise forms.ValidationError('El ataque base debe estar entre 100 y 800.')
         return ataque
 
     def clean_descripcion(self):
         descripcion = self.cleaned_data.get('descripcion', '').strip()
-        # Es opcional: solo se revisa si se escribio algo.
         if descripcion and len(descripcion) < 10:
             raise forms.ValidationError('Si escribes una descripción, usa al menos 10 caracteres.')
         if len(descripcion) > 600:
@@ -101,7 +97,6 @@ class ItemForm(forms.ModelForm):
             )
         return descripcion
 
-    # ---- reglas del negocio que cruzan varios campos ----
     def clean(self):
         datos = super().clean()
         banner = datos.get('banner')

@@ -1,5 +1,3 @@
-// Las tiradas de 3 estrellas no se guardan en la base de datos, asi que
-// las calculamos aqui: total pedido - cartas de 4/5 estrellas mostradas.
 (function () {
     var cont = document.querySelector('[data-total]');
     var el = document.getElementById('tres-estrellas');

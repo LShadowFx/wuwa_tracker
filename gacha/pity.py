@@ -42,7 +42,6 @@ def _elegir_item_cinco_estrellas(banner, estado):
         destacado = next((i for i in items_5e if i.es_destacado), None)
         return destacado, None
 
-    # Banner permanente: sin item destacado, se elige cualquiera al azar.
     item = random.choice(items_5e) if items_5e else None
     return item, None
 

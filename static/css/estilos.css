@@ -102,7 +102,6 @@ code {
     color: var(--apagado);
 }
 
-/* ---------- Barra de navegacion ---------- */
 .nav-wuwa {
     position: sticky;
     top: 0;
@@ -255,7 +254,6 @@ code {
     cursor: pointer;
 }
 
-/* ---------- Botones ---------- */
 .btn-w {
     display: inline-flex;
     align-items: center;
@@ -308,7 +306,7 @@ code {
     width: 100%;
 }
 
-/* ---------- Mensajes (flash) ---------- */
+
 .flash {
     display: flex;
     align-items: center;
@@ -343,7 +341,6 @@ code {
     cursor: pointer;
 }
 
-/* ---------- Titulos de pagina ---------- */
 .cabecera-pagina {
     padding: 2.4rem 0 1.6rem;
 }
@@ -388,7 +385,7 @@ code {
     max-width: 60ch;
 }
 
-/* ---------- Banner (hero) ---------- */
+
 .banner-hero {
     position: relative;
     display: flex;
@@ -442,7 +439,6 @@ code {
     background-position: 100% 35%;
 }
 
-/* el arte oficial trae texto horneado a la izquierda: lo tapamos con un degradado mas fuerte */
 .banner-hero--arma .banner-hero-overlay {
     background:
         linear-gradient(90deg, rgba(5, 8, 13, 0.98) 0%, rgba(5, 8, 13, 0.93) 36%, rgba(5, 8, 13, 0.3) 60%, rgba(5, 8, 13, 0) 84%),
@@ -561,7 +557,7 @@ code {
     margin: 0;
 }
 
-/* collage del banner permanente (sin item destacado) */
+
 .hero-collage {
     position: absolute;
     top: 0;
@@ -587,7 +583,6 @@ code {
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* imagen destacada en heroes de personaje/arma */
 .hero-destacado {
     position: absolute;
     top: 0;
@@ -608,7 +603,7 @@ code {
     filter: drop-shadow(0 0 30px rgba(94, 227, 238, 0.3));
 }
 
-/* ---------- Plantel de items de cada banner ---------- */
+
 .roster {
     margin-top: 1.4rem;
 }
@@ -744,7 +739,6 @@ code {
     clip-path: polygon(0 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
 }
 
-/* ---------- Resultado de tiradas ---------- */
 .escenario {
     position: relative;
     margin-top: 2rem;
@@ -961,7 +955,6 @@ code {
     color: var(--apagado);
 }
 
-/* ---------- Dashboard ---------- */
 .pity-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
@@ -1167,7 +1160,7 @@ code {
     background: var(--panel);
 }
 
-/* ---------- Login ---------- */
+
 .auth-fondo {
     display: grid;
     place-items: center;
@@ -1229,7 +1222,6 @@ code {
     margin: 0.2rem 0 1.4rem;
 }
 
-/* formularios (crispy-forms genera clases de Bootstrap) */
 .auth-panel .mb-3 {
     margin-bottom: 1rem;
 }
@@ -1282,7 +1274,7 @@ code {
     padding: 0.2rem 0;
 }
 
-/* ---------- Pie ---------- */
+
 .pie {
     position: relative;
     z-index: 1;
@@ -1295,7 +1287,7 @@ code {
     border-top: 1px solid var(--line);
 }
 
-/* ---------- Animaciones ---------- */
+
 @keyframes entrar {
     from {
         opacity: 0;
@@ -1364,9 +1356,7 @@ code {
     }
 }
 
-/* ---------- Responsive ---------- */
-/* La barra tiene mas links (catalogo, banners, feed, crear, dashboard): se compacta
-   en pantallas medianas y se pliega en un menu desplegable antes que el resto de la pagina. */
+
 @media (max-width: 1280px) {
     .nav-inner {
         gap: 1rem;
@@ -1615,7 +1605,6 @@ a.eco:hover .eco-ver {
     margin-top: 1.1rem;
 }
 
-/* Detalle de un item */
 .detalle {
     display: grid;
     grid-template-columns: minmax(240px, 400px) 1fr;
@@ -1688,7 +1677,7 @@ a.eco:hover .eco-ver {
     text-align: right;
 }
 
-/* Formulario de creacion */
+
 .auth-panel--ancho {
     max-width: 560px;
 }
@@ -1713,7 +1702,7 @@ a.eco:hover .eco-ver {
     color: var(--apagado);
 }
 
-/* Enlaces dentro de tarjetas y tablas */
+
 .pull-nombre a {
     color: inherit;
 }

@@ -1,11 +1,9 @@
-{# Portada de un banner. Parametros: banner, numero (opcional), compacto (True en el listado). #}
 {% with destacado=banner.item_destacado %}
 <section class="banner-hero banner-hero--{{ banner.tipo }}{% if compacto %} banner-hero--compacto{% endif %}">
     <div class="banner-hero-overlay"></div>
     {% if numero %}<div class="banner-num">{{ numero|stringformat:"02d" }}</div>{% endif %}
 
     {% if banner.tipo == 'permanente' %}
-    {# Sin item destacado: mostramos un collage con los primeros 4 items del banner #}
     <div class="hero-collage" aria-hidden="true">
         {% for item in banner.items.all|slice:":4" %}
         <img src="{{ item.imagen.url }}" alt="" style="--n:{{ forloop.counter0 }}">
