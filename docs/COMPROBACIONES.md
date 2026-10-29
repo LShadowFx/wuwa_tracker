@@ -22,7 +22,7 @@ Usuario usado para las pruebas con sesión: `vice` o `luis` (ver README).
 
 | # | Acción / entrada | Resultado esperado | Observado |
 |---|------------------|--------------------|-----------|
-| 9 | Con sesión, abrir `/simular/` | Se muestra el formulario con banner y cantidad | OK (200) |
+| 9 | Con sesión, presionar el botón para simular | Se muestra el formulario con banner y cantidad | OK (200) |
 | 10 | Enviar cantidad `5`, `abc` o `-1` (con un banner válido) | Se rechaza, se vuelve al formulario marcando "Cantidad" con error; no se guarda nada | OK ("Escoja una opción válida."; sin cambios en la base) |
 | 11 | Enviar banner inexistente (`999`) o vacío | Se rechaza, se marca "Banner" con error; no se guarda nada | OK ("Escoja una opción válida." / "Este campo es obligatorio.") |
 | 12 | Enviar el formulario sin ningún campo | Ambos campos marcados como obligatorios | OK (2 × "Este campo es obligatorio.") |
@@ -63,12 +63,11 @@ Para las filas 22 a 31, abrir `/items/nuevo/` con sesión iniciada.
 | # | Acción / entrada | Resultado esperado | Observado |
 |---|------------------|--------------------|-----------|
 | 32 | Abrir un personaje desde el catálogo (ej. `Verdant Summit`) | La dirección usa el nombre en minúsculas y con guiones: `/items/verdant-summit/` | Correcto: la dirección muestra el nombre, con guiones donde hay espacios |
-| 33 | Escribir una dirección con el id antiguo: `/items/1/` | Error 404 (ya no se identifica por id) | _(completar)_ |
-| 34 | Crear un item llamado `Jiyan!` (nombre distinto de `Jiyan`, pero con el mismo slug) | Se crea con el slug `jiyan-1`; el detalle de `Jiyan` sigue en `/items/jiyan/` | _(completar)_ |
+| 33 | Crear un item llamado `Jiyan!` (nombre distinto de `Jiyan`, pero con el mismo slug) | Se crea con el slug `jiyan-1`; el detalle de `Jiyan` sigue en `/items/jiyan/` | _(completar)_ |
 
 ## F. Detalle del item: descripción, ataque base e imagen
 
 | # | Acción / entrada | Resultado esperado | Observado |
 |---|------------------|--------------------|-----------|
-| 35 | Abrir `/items/jiyan/` | Muestra la descripción y la fila "Ataque base (nivel 90): 438" | _(completar)_ |
-| 36 | Crear otro item válido (ej. `Prueba Dos`) sin subir imagen y abrir su detalle | Muestra la imagen genérica (`sin_imagen.jpg`), no un ícono de imagen rota | _(completar)_ |
+| 34 | Abrir `/items/jiyan/` | Muestra la descripción y la fila "Ataque base (nivel 90): 438" | _(completar)_ |
+| 35 | Crear otro item válido (ej. `Prueba Dos`) sin subir imagen y abrir su detalle | Muestra la imagen genérica (`sin_imagen.jpg`), no un ícono de imagen rota | _(completar)_ |
