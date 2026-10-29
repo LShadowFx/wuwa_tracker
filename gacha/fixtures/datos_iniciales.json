@@ -1,58 +1,419 @@
 [
-  {
-    "model": "gacha.banner",
-    "pk": 1,
-    "fields": {
-      "nombre": "Danza del Viento: Jiyan",
-      "tipo": "personaje",
-      "descripcion": "Banner limitado con probabilidad aumentada de obtener a Jiyan (5 estrellas, Aero, Broadblade)."
-    }
-  },
-  {
-    "model": "gacha.banner",
-    "pk": 2,
-    "fields": {
-      "nombre": "Filo Templado: Verdant Summit",
-      "tipo": "arma",
-      "descripcion": "Banner de arma limitada con probabilidad aumentada de obtener el broadblade Verdant Summit."
-    }
-  },
-  {
-    "model": "gacha.banner",
-    "pk": 3,
-    "fields": {
-      "nombre": "Banner Permanente",
-      "tipo": "permanente",
-      "descripcion": "Banner estandar, siempre disponible. Sin item destacado: el 5 estrellas que sale es al azar."
-    }
-  },
-
-  {"model": "gacha.item", "pk": 1, "fields": {"nombre": "Jiyan", "categoria": "personaje", "rareza": 5, "es_destacado": true, "banner": 1}},
-  {"model": "gacha.item", "pk": 2, "fields": {"nombre": "Aalto", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 1}},
-  {"model": "gacha.item", "pk": 3, "fields": {"nombre": "Danjin", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 1}},
-  {"model": "gacha.item", "pk": 4, "fields": {"nombre": "Taoqi", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 1}},
-
-  {"model": "gacha.item", "pk": 5, "fields": {"nombre": "Verdant Summit", "categoria": "arma", "rareza": 5, "es_destacado": true, "banner": 2}},
-  {"model": "gacha.item", "pk": 6, "fields": {"nombre": "Guardian Broadblade", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 2}},
-  {"model": "gacha.item", "pk": 7, "fields": {"nombre": "Guardian Pistols", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 2}},
-
-  {"model": "gacha.item", "pk": 8,  "fields": {"nombre": "Calcharo", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 9,  "fields": {"nombre": "Encore", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 10, "fields": {"nombre": "Jianxin", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 11, "fields": {"nombre": "Lingyang", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 12, "fields": {"nombre": "Verina", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 13, "fields": {"nombre": "Yinlin", "categoria": "personaje", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 14, "fields": {"nombre": "Emerald of Genesis", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 15, "fields": {"nombre": "Lustrous Razor", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 16, "fields": {"nombre": "Static Mist", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 17, "fields": {"nombre": "Abyss Surges", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 18, "fields": {"nombre": "Cosmic Ripples", "categoria": "arma", "rareza": 5, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 19, "fields": {"nombre": "Baizhi", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 20, "fields": {"nombre": "Chixia", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 21, "fields": {"nombre": "Sanhua", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 22, "fields": {"nombre": "Mortefi", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 23, "fields": {"nombre": "Yangyang", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 24, "fields": {"nombre": "Yuanwu", "categoria": "personaje", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 25, "fields": {"nombre": "Guardian Sword", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 3}},
-  {"model": "gacha.item", "pk": 26, "fields": {"nombre": "Guardian Rectifier", "categoria": "arma", "rareza": 4, "es_destacado": false, "banner": 3}}
+{
+  "model": "gacha.banner",
+  "pk": 1,
+  "fields": {
+    "nombre": "Danza del Viento: Jiyan",
+    "tipo": "personaje",
+    "descripcion": "Banner limitado con probabilidad aumentada de obtener a Jiyan (5 estrellas, Aero, Broadblade)."
+  }
+},
+{
+  "model": "gacha.banner",
+  "pk": 2,
+  "fields": {
+    "nombre": "Filo Templado: Verdant Summit",
+    "tipo": "arma",
+    "descripcion": "Banner de arma limitada con probabilidad aumentada de obtener el broadblade Verdant Summit."
+  }
+},
+{
+  "model": "gacha.banner",
+  "pk": 3,
+  "fields": {
+    "nombre": "Banner Permanente",
+    "tipo": "permanente",
+    "descripcion": "Banner estandar, siempre disponible. Sin item destacado: el 5 estrellas que sale es al azar."
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 1,
+  "fields": {
+    "nombre": "Jiyan",
+    "categoria": "personaje",
+    "slug": "jiyan",
+    "rareza": 5,
+    "imagen": "jiyan.jpg",
+    "descripcion": "Resonador Aero de 5 estrellas que combate con Broadblade. Es el general de los Midnight Rangers de Jinzhou y funciona como DPS principal del equipo. Su arma exclusiva es Verdant Summit.",
+    "ataque_base": 438,
+    "es_destacado": true,
+    "banner": 1
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 2,
+  "fields": {
+    "nombre": "Aalto",
+    "categoria": "personaje",
+    "slug": "aalto",
+    "rareza": 4,
+    "imagen": "aalto.png",
+    "descripcion": "Resonador Aero de 4 estrellas que usa Pistols. Es un sub-DPS: entra al combate, aporta daño rápido y deja el lugar a otro personaje.",
+    "ataque_base": 263,
+    "es_destacado": false,
+    "banner": 1
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 3,
+  "fields": {
+    "nombre": "Danjin",
+    "categoria": "personaje",
+    "slug": "danjin",
+    "rareza": 4,
+    "imagen": "Danjin.png",
+    "descripcion": "Resonadora Havoc de 4 estrellas que usa Sword. Su estilo es arriesgado: sacrifica parte de su propia vida a cambio de más daño, así que conviene llevar curación en el equipo.",
+    "ataque_base": 263,
+    "es_destacado": false,
+    "banner": 1
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 4,
+  "fields": {
+    "nombre": "Taoqi",
+    "categoria": "personaje",
+    "slug": "taoqi",
+    "rareza": 4,
+    "imagen": "taoqi.webp",
+    "descripcion": "Resonadora Havoc de 4 estrellas con Broadblade. Es un personaje defensivo: su escudo y su daño escalan con la DEF, no con el ataque, por eso su ATK base es bajo.",
+    "ataque_base": 225,
+    "es_destacado": false,
+    "banner": 1
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 5,
+  "fields": {
+    "nombre": "Verdant Summit",
+    "categoria": "arma",
+    "slug": "verdant-summit",
+    "rareza": 5,
+    "imagen": "Verdant_Summit.webp",
+    "descripcion": "Broadblade de 5 estrellas, arma exclusiva de Jiyan (banner limitado). Combina 587 de ATK base con CRIT DMG 48.6% como estadística secundaria.",
+    "ataque_base": 587,
+    "es_destacado": true,
+    "banner": 2
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 6,
+  "fields": {
+    "nombre": "Guardian Broadblade",
+    "categoria": "arma",
+    "slug": "guardian-broadblade",
+    "rareza": 4,
+    "imagen": "Guardian_Broadblade.webp",
+    "descripcion": "Broadblade sencilla de la serie Guardian. 325 de ATK base y ATK 24.3% como estadística secundaria. Sirve como arma de transición.",
+    "ataque_base": 325,
+    "es_destacado": false,
+    "banner": 2
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 7,
+  "fields": {
+    "nombre": "Guardian Pistols",
+    "categoria": "arma",
+    "slug": "guardian-pistols",
+    "rareza": 4,
+    "imagen": "Guardian_Pistols.webp",
+    "descripcion": "Pistols sencillas de la serie Guardian. 325 de ATK base y ATK 24.3% como estadística secundaria. Sirven como arma de transición.",
+    "ataque_base": 325,
+    "es_destacado": false,
+    "banner": 2
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 8,
+  "fields": {
+    "nombre": "Calcharo",
+    "categoria": "personaje",
+    "slug": "calcharo",
+    "rareza": 5,
+    "imagen": "calcharo.png",
+    "descripcion": "Resonador Electro de 5 estrellas con Broadblade. DPS principal que concentra su daño en un solo objetivo con ataques de gran impacto.",
+    "ataque_base": 438,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 9,
+  "fields": {
+    "nombre": "Encore",
+    "categoria": "personaje",
+    "slug": "encore",
+    "rareza": 5,
+    "imagen": "encore.webp",
+    "descripcion": "Resonadora Fusion de 5 estrellas con Rectifier. DPS principal que lucha junto a su inseparable Cosmos y puede entrar en un modo de ataque explosivo.",
+    "ataque_base": 425,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 10,
+  "fields": {
+    "nombre": "Jianxin",
+    "categoria": "personaje",
+    "slug": "jianxin",
+    "rareza": 5,
+    "imagen": "jianxin.webp",
+    "descripcion": "Resonadora Aero de 5 estrellas con Gauntlets. Cumple un rol de soporte: tiene mucha vida base, cura y ayuda al equipo, aunque su ATK base es moderado.",
+    "ataque_base": 338,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 11,
+  "fields": {
+    "nombre": "Lingyang",
+    "categoria": "personaje",
+    "slug": "lingyang",
+    "rareza": 5,
+    "imagen": "Lingyang.png",
+    "descripcion": "Resonador Glacio de 5 estrellas con Gauntlets. DPS principal de combate cercano, con ataques rápidos de daño Glacio.",
+    "ataque_base": 438,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 12,
+  "fields": {
+    "nombre": "Verina",
+    "categoria": "personaje",
+    "slug": "verina",
+    "rareza": 5,
+    "imagen": "verina.webp",
+    "descripcion": "Resonadora Spectro de 5 estrellas con Rectifier. Es la sanadora principal del catálogo y, además de curar, potencia el daño del equipo.",
+    "ataque_base": 338,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 13,
+  "fields": {
+    "nombre": "Yinlin",
+    "categoria": "personaje",
+    "slug": "yinlin",
+    "rareza": 5,
+    "imagen": "yinlin.webp",
+    "descripcion": "Resonadora Electro de 5 estrellas con Rectifier. Sub-DPS que marca a los enemigos para provocar daño Electro adicional cuando el equipo ataca.",
+    "ataque_base": 400,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 14,
+  "fields": {
+    "nombre": "Emerald of Genesis",
+    "categoria": "arma",
+    "slug": "emerald-of-genesis",
+    "rareza": 5,
+    "imagen": "Emerald_of_Genesis.webp",
+    "descripcion": "Sword de 5 estrellas del banner permanente. 587 de ATK base y CRIT Rate 24.3%. Es la opción más usada para los personajes que pelean con espada.",
+    "ataque_base": 587,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 15,
+  "fields": {
+    "nombre": "Lustrous Razor",
+    "categoria": "arma",
+    "slug": "lustrous-razor",
+    "rareza": 5,
+    "imagen": "Lustrous_Razor.webp",
+    "descripcion": "Broadblade de 5 estrellas del banner permanente. 587 de ATK base y ATK 36.4%. Su efecto sube la regeneración de energía y potencia el daño de la Resonance Liberation.",
+    "ataque_base": 587,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 16,
+  "fields": {
+    "nombre": "Static Mist",
+    "categoria": "arma",
+    "slug": "static-mist",
+    "rareza": 5,
+    "imagen": "Static_Mist.webp",
+    "descripcion": "Pistols de 5 estrellas del banner permanente. 587 de ATK base y CRIT Rate 24.3%. Sube la regeneración de energía y, al usar la Outro Skill, da un bono de ATK al personaje que entra al combate.",
+    "ataque_base": 587,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 17,
+  "fields": {
+    "nombre": "Abyss Surges",
+    "categoria": "arma",
+    "slug": "abyss-surges",
+    "rareza": 5,
+    "imagen": "Abyss_Surges.webp",
+    "descripcion": "Gauntlets de 5 estrellas del banner permanente. 587 de ATK base y ATK 36.4%. Su efecto mejora la regeneración de energía y combina bien con Jianxin y Lingyang.",
+    "ataque_base": 587,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 18,
+  "fields": {
+    "nombre": "Cosmic Ripples",
+    "categoria": "arma",
+    "slug": "cosmic-ripples",
+    "rareza": 5,
+    "imagen": "Cosmic_Ripples.webp",
+    "descripcion": "Rectifier de 5 estrellas del banner permanente. 500 de ATK base y cerca de 54% de ATK como estadística secundaria. Va bien con personajes que dañan con ataques básicos.",
+    "ataque_base": 500,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 19,
+  "fields": {
+    "nombre": "Baizhi",
+    "categoria": "personaje",
+    "slug": "baizhi",
+    "rareza": 4,
+    "imagen": "baizhi.webp",
+    "descripcion": "Resonadora Glacio de 4 estrellas con Rectifier. Sanadora del equipo, con mucha vida base y el ATK base más bajo del catálogo.",
+    "ataque_base": 213,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 20,
+  "fields": {
+    "nombre": "Chixia",
+    "categoria": "personaje",
+    "slug": "chixia",
+    "rareza": 4,
+    "imagen": "Chixia.png",
+    "descripcion": "Resonadora Fusion de 4 estrellas con Pistols. DPS que basa su daño en ataques básicos disparados en ráfaga.",
+    "ataque_base": 300,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 21,
+  "fields": {
+    "nombre": "Sanhua",
+    "categoria": "personaje",
+    "slug": "sanhua",
+    "rareza": 4,
+    "imagen": "sanhua.webp",
+    "descripcion": "Resonadora Glacio de 4 estrellas con Sword. Sub-DPS que aporta daño Glacio al equipo.",
+    "ataque_base": 275,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 22,
+  "fields": {
+    "nombre": "Mortefi",
+    "categoria": "personaje",
+    "slug": "mortefi",
+    "rareza": 4,
+    "imagen": "mortefi.png",
+    "descripcion": "Resonador Fusion de 4 estrellas con Pistols. Sub-DPS con aporte de apoyo para el personaje que está en primera línea.",
+    "ataque_base": 250,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 23,
+  "fields": {
+    "nombre": "Yangyang",
+    "categoria": "personaje",
+    "slug": "yangyang",
+    "rareza": 4,
+    "imagen": "yangyang.webp",
+    "descripcion": "Resonadora Aero de 4 estrellas con Sword. Personaje de apoyo y sub-DPS, pensada para acompañar a otros Resonadores.",
+    "ataque_base": 250,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 24,
+  "fields": {
+    "nombre": "Yuanwu",
+    "categoria": "personaje",
+    "slug": "yuanwu",
+    "rareza": 4,
+    "imagen": "yuanwu.png",
+    "descripcion": "Resonador Electro de 4 estrellas con Gauntlets. Es un sub-DPS defensivo cuyo daño escala con la DEF; tiene la DEF base más alta de este catálogo (1637).",
+    "ataque_base": 225,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 25,
+  "fields": {
+    "nombre": "Guardian Sword",
+    "categoria": "arma",
+    "slug": "guardian-sword",
+    "rareza": 4,
+    "imagen": "Guardian_Sword.webp",
+    "descripcion": "Sword sencilla de la serie Guardian. 300 de ATK base y HP 30.3% como estadística secundaria, más orientada a la resistencia que al daño.",
+    "ataque_base": 300,
+    "es_destacado": false,
+    "banner": 3
+  }
+},
+{
+  "model": "gacha.item",
+  "pk": 26,
+  "fields": {
+    "nombre": "Guardian Rectifier",
+    "categoria": "arma",
+    "slug": "guardian-rectifier",
+    "rareza": 4,
+    "imagen": "Guardian_Rectifier.webp",
+    "descripcion": "Rectifier sencillo de la serie Guardian. 325 de ATK base y ATK 24.3% como estadística secundaria. Sirve como arma de transición.",
+    "ataque_base": 325,
+    "es_destacado": false,
+    "banner": 3
+  }
+}
 ]
