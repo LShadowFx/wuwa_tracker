@@ -5,9 +5,11 @@
     var x = c.getContext('2d'), W, H, P = [];
     function medir() { W = c.width = innerWidth; H = c.height = innerHeight; }
     medir(); addEventListener('resize', medir);
-    for (var i = 0; i < 60; i++) {
-        P.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.7 + 0.4,
-                 v: Math.random() * 0.3 + 0.06, a: Math.random() * 0.5 + 0.15, d: Math.random() * 6.28 });
+    for (var i = 0; i < 20; i++) {
+        P.push({
+            x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.7 + 0.4,
+            v: Math.random() * 0.3 + 0.06, a: Math.random() * 0.5 + 0.15, d: Math.random() * 6.28
+        });
     }
     (function dibujar() {
         x.clearRect(0, 0, W, H);
