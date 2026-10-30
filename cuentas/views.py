@@ -6,7 +6,6 @@ from django.utils.http import url_has_allowed_host_and_scheme
 
 
 def _destino_seguro(request):
-    """Devuelve la pagina a la que volver tras el login (parametro ?next=), solo si es de este sitio."""
     destino = request.POST.get('next') or request.GET.get('next') or ''
     if destino and url_has_allowed_host_and_scheme(destino, allowed_hosts={request.get_host()}):
         return destino
