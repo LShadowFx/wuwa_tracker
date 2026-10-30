@@ -31,7 +31,6 @@ class SimularTiradaForm(forms.Form):
 
 
 class ItemForm(forms.ModelForm):
-    """Alta de un personaje o arma desde la pagina (sin pasar por la terminal)."""
 
     class Meta:
         model = Item
@@ -142,7 +141,6 @@ ORDEN_CATALOGO = {
 
 
 class FiltroCatalogoForm(forms.Form):
-    """Filtros del catalogo (se envian por GET, todos opcionales)."""
 
     q = forms.CharField(required=False, max_length=100, label='Buscar')
     categoria = forms.ChoiceField(
