@@ -1,0 +1,235 @@
+/* =====================================================================
+   Gestion (CRUD): pestañas, tablas, formularios por secciones,
+   dialogo de confirmacion y detalles por perfil.
+   Reutiliza las variables y componentes de estilos.css.
+   ===================================================================== */
+
+/* ---- Boton de peligro (eliminar) ---- */
+.btn-w--peligro {
+    color: #2a0409;
+    background: linear-gradient(100deg, #c23648, var(--rojo) 60%, #ffa1ab);
+}
+
+/* ---- Etiqueta de perfil junto al usuario en la barra ---- */
+.rol-tag {
+    font-style: normal;
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--oro-claro);
+    padding: 0.05rem 0.45rem;
+    border: 1px solid rgba(247, 201, 75, 0.45);
+    border-radius: 3px;
+}
+
+/* ---- Probabilidad en tarjetas y notas ---- */
+.eco-prob {
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--oro-claro);
+}
+
+.eco-prob--destacado {
+    color: var(--cian);
+}
+
+.nota-prob {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+}
+
+/* ---- Botones de gestion dentro de detalles ---- */
+.pull-actions--gestion {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+}
+
+/* ---- Pestañas de gestion ---- */
+.tabs-gestion {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0 0 1.2rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.tab-g {
+    padding: 0.55rem 1.2rem;
+    font-family: var(--f-titulo);
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--apagado);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+
+.tab-g:hover {
+    color: var(--texto);
+}
+
+.tab-g.activa {
+    color: var(--cian);
+    border-bottom-color: var(--cian);
+}
+
+/* ---- Tablas de gestion ---- */
+.tabla-gestion th.derecha {
+    text-align: right;
+}
+
+.tabla-gestion td:last-child {
+    white-space: nowrap;
+}
+
+.acciones-fila {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.acciones-fila form {
+    margin: 0;
+}
+
+/* ---- Formularios por secciones ---- */
+.auth-panel--form {
+    max-width: 780px;
+}
+
+.form-seccion {
+    margin: 0 0 1.6rem;
+    padding: 0;
+    border: 0;
+}
+
+.form-seccion legend {
+    float: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 0.9rem;
+    padding: 0 0 0.5rem;
+    width: 100%;
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--texto);
+    border-bottom: 1px solid var(--line);
+}
+
+.form-seccion .paso {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    color: #04141a;
+    background: linear-gradient(135deg, var(--cian), #9af3fb);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1.2rem;
+}
+
+.form-grid .span-2 {
+    grid-column: 1 / -1;
+}
+
+.prob-caja {
+    padding: 1rem 1.1rem 0.4rem;
+    border: 1px solid var(--line-fuerte);
+    border-left: 3px solid var(--oro);
+    border-radius: 4px;
+    background: rgba(247, 201, 75, 0.06);
+}
+
+.prob-ejemplo {
+    margin: 0 0 0.6rem;
+    font-size: 0.85rem;
+    color: var(--apagado);
+}
+
+.prob-ejemplo b {
+    color: var(--oro-claro);
+}
+
+.img-actual {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 0.7rem;
+}
+
+.img-actual img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 4px;
+    border: 1px solid var(--line-fuerte);
+    background: #0e1826;
+}
+
+.acciones-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0.6rem;
+}
+
+/* ---- Dialogo de confirmacion al eliminar ---- */
+.dialogo-w {
+    width: calc(100% - 2rem);
+    max-width: 440px;
+    padding: 1.8rem 1.8rem 1.5rem;
+    color: var(--texto);
+    background: var(--panel-solid);
+    border: 1px solid var(--rojo);
+    border-radius: 6px;
+    box-shadow: 0 0 50px rgba(255, 107, 122, 0.18), 0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+.dialogo-w::backdrop {
+    background: rgba(2, 5, 9, 0.78);
+    backdrop-filter: blur(3px);
+}
+
+.dialogo-w h3 {
+    margin: 0 0 0.5rem;
+    font-family: var(--f-titulo);
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rojo);
+}
+
+.dialogo-w p {
+    margin: 0 0 1.4rem;
+    color: var(--texto);
+}
+
+.dialogo-w .acciones-form {
+    justify-content: flex-end;
+    margin: 0;
+}
+
+@media (max-width: 700px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tab-g {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.95rem;
+    }
+}
