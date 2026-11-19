@@ -12,13 +12,14 @@
 
         <div class="nav-menu" id="navMenu">
             <div class="nav-links">
-                {# Visitante: solo catalogo y banners #}
+                {# Visitante: catalogo, banners y feed #}
                 <a class="nav-link-w" href="{% url 'gacha:catalogo' %}">Catálogo</a>
                 <a class="nav-link-w" href="{% url 'gacha:banners' %}">Banners</a>
 
-                {# Jugador, staff y admin: feed y dashboard #}
-                {% if user.is_authenticated %}
                 <a class="nav-link-w" href="{% url 'gacha:feed' %}">Feed</a>
+
+                {# Jugador, staff y admin: dashboard #}
+                {% if user.is_authenticated %}
                 <a class="nav-link-w" href="{% url 'gacha:dashboard' %}">Mi dashboard</a>
                 {% endif %}
 

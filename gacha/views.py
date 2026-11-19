@@ -145,6 +145,7 @@ def item_eliminar(request, id):
 
     item = get_object_or_404(Item, id=id)
     nombre = item.nombre
+    imagen = item.imagen
     try:
         item.delete()
     except ProtectedError:
@@ -155,6 +156,10 @@ def item_eliminar(request, id):
             f'({_cuenta(veces, "tirada", "tiradas")}).',
         )
         return redirect('gacha:item_detalle', slug=item.slug)
+    # Igual que el profe: se borra el archivo de la imagen, salvo la generica
+    # (o si otro item todavia usa el mismo archivo).
+    if imagen and imagen.name != 'sin_imagen.jpg' and not Item.objects.filter(imagen=imagen.name).exists():
+        imagen.delete(save=False)
     messages.success(request, f'Se eliminó «{nombre}» correctamente.')
     return redirect('gacha:item_gestionar')
 
@@ -347,8 +352,7 @@ def dashboard(request):
     })
 
 
-@login_required
 def feed_publico(request):
-    """El feed solo lo ven los jugadores (con sesion); el visitante no entra."""
+    """El feed es publico: lo puede ver cualquiera, con o sin sesion."""
     tiradas = Tirada.objects.filter(compartida=True).select_related('usuario', 'banner', 'item')[:20]
     return render(request, 'gacha/feed.html', {'tiradas': tiradas})
