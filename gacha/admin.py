@@ -10,7 +10,7 @@ class BannerAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'categoria', 'rareza', 'es_destacado', 'banner')
+    list_display = ('nombre', 'categoria', 'rareza', 'probabilidad', 'es_destacado', 'banner')
     list_filter = ('categoria', 'rareza', 'banner')
 
 

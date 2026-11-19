@@ -1,7 +1,7 @@
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 
-from .models import Banner, Item, CATEGORIA_ITEM
+from .models import Banner, Item, CATEGORIA_ITEM, TIPO_BANNER
 
 CANTIDAD_CHOICES = [
     (1, 'x1'),
@@ -30,16 +30,92 @@ class SimularTiradaForm(forms.Form):
         return cantidad
 
 
+class BannerForm(forms.ModelForm):
+    """Formulario compartido para crear y editar banners."""
+
+    class Meta:
+        model = Banner
+        fields = ['nombre', 'tipo', 'descripcion']
+        labels = {
+            'nombre': 'Nombre del banner',
+            'tipo': 'Tipo de banner',
+            'descripcion': 'Descripción',
+        }
+        help_texts = {
+            'nombre': 'Entre 3 y 100 caracteres. No puede repetirse.',
+            'tipo': 'Personaje limitado: solo personajes y un 5★ destacado (con 50/50). '
+                    'Arma limitada: solo armas y un 5★ destacado. '
+                    'Permanente: personajes y armas, sin destacado.',
+            'descripcion': 'Opcional. Máximo 400 caracteres.',
+        }
+        widgets = {
+            'descripcion': forms.Textarea(attrs={'rows': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tipo'].choices = [('', 'Selecciona el tipo')] + list(TIPO_BANNER)
+
+    def clean_nombre(self):
+        nombre = ' '.join(self.cleaned_data['nombre'].split())
+        if len(nombre) < 3:
+            raise forms.ValidationError('El nombre debe tener al menos 3 caracteres.')
+        repetidos = Banner.objects.filter(nombre__iexact=nombre).exclude(pk=self.instance.pk)
+        if repetidos.exists():
+            raise forms.ValidationError(f'Ya existe un banner llamado «{nombre}». Usa otro nombre.')
+        return nombre
+
+    def clean_descripcion(self):
+        descripcion = self.cleaned_data.get('descripcion', '').strip()
+        if len(descripcion) > 400:
+            raise forms.ValidationError(
+                f'La descripción tiene {len(descripcion)} caracteres; el máximo es 400.'
+            )
+        return descripcion
+
+    def clean(self):
+        datos = super().clean()
+        tipo = datos.get('tipo')
+        # Al editar, el nuevo tipo no puede contradecir los items que el banner ya tiene.
+        if self.instance.pk and tipo:
+            items = self.instance.items.all()
+            if tipo == 'permanente':
+                if items.filter(es_destacado=True).exists():
+                    self.add_error(
+                        'tipo',
+                        'El banner permanente no tiene item destacado. '
+                        'Quita el destacado de sus items antes de cambiar el tipo.',
+                    )
+            else:
+                admite = 'personajes' if tipo == 'personaje' else 'armas'
+                if items.exclude(categoria=tipo).exists():
+                    self.add_error(
+                        'tipo',
+                        f'Este banner tiene items que no son {admite}. '
+                        'Muévelos a otro banner antes de cambiar el tipo.',
+                    )
+                elif items.filter(rareza=5, es_destacado=False).exists():
+                    self.add_error(
+                        'tipo',
+                        'Un banner limitado solo puede tener como 5★ al item destacado. '
+                        'Revisa los 5★ de este banner antes de cambiar el tipo.',
+                    )
+        return datos
+
+
 class ItemForm(forms.ModelForm):
+    """Formulario compartido para crear y editar items (personajes y armas)."""
 
     class Meta:
         model = Item
-        fields = ['nombre', 'categoria', 'rareza', 'banner', 'imagen', 'ataque_base', 'descripcion', 'es_destacado']
+        fields = ['nombre', 'categoria', 'rareza', 'banner', 'probabilidad', 'imagen',
+                  'ataque_base', 'descripcion', 'es_destacado']
         labels = {
             'nombre': 'Nombre',
             'categoria': 'Categoría',
             'rareza': 'Rareza',
             'banner': 'Banner',
+            'probabilidad': 'Probabilidad (1 a 100)',
             'imagen': 'Imagen',
             'ataque_base': 'Ataque base (nivel 90)',
             'descripcion': 'Descripción',
@@ -50,10 +126,14 @@ class ItemForm(forms.ModelForm):
             'ataque_base': 'Opcional. Número entero entre 100 y 800 (ATK a nivel 90, sin arma ni ecos en personajes).',
             'descripcion': 'Opcional. Entre 10 y 600 caracteres: rol, elemento, tipo de arma, etc.',
             'es_destacado': 'Solo un 5 estrellas puede serlo, y cada banner limitado tiene uno solo.',
+            'probabilidad': 'Mientras más alto el número, más seguido sale este item frente a los '
+                            'demás de su misma rareza en el banner. No se usa en el item destacado '
+                            '(ese sale por la regla del banner).',
         }
         widgets = {
             'imagen': forms.FileInput(attrs={'accept': 'image/png,image/jpeg,image/webp'}),
             'descripcion': forms.Textarea(attrs={'rows': 4}),
+            'probabilidad': forms.NumberInput(attrs={'min': 1, 'max': 100, 'step': 1}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -79,6 +159,12 @@ class ItemForm(forms.ModelForm):
             if imagen.size > TAMANO_MAXIMO_IMAGEN:
                 raise forms.ValidationError('La imagen pesa más de 2 MB. Sube una más liviana.')
         return imagen
+
+    def clean_probabilidad(self):
+        probabilidad = self.cleaned_data.get('probabilidad')
+        if probabilidad is None or not (1 <= probabilidad <= 100):
+            raise forms.ValidationError('La probabilidad debe ser un número entero entre 1 y 100.')
+        return probabilidad
 
     def clean_ataque_base(self):
         ataque = self.cleaned_data.get('ataque_base')

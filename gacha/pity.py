@@ -18,6 +18,14 @@ def probabilidad_5_estrellas(pity_actual):
     return min(probabilidad, 1.0)
 
 
+def _elegir_por_probabilidad(items):
+    """Elige un item de la lista segun su campo `probabilidad` (a mayor valor, mas seguido sale)."""
+    if not items:
+        return None
+    pesos = [item.probabilidad for item in items]
+    return random.choices(items, weights=pesos, k=1)[0]
+
+
 def _elegir_item_cinco_estrellas(banner, estado):
     items_5e = list(banner.items.filter(rareza=5))
 
@@ -35,14 +43,14 @@ def _elegir_item_cinco_estrellas(banner, estado):
             )
         else:
             pool_estandar = []
-        item = random.choice(pool_estandar) if pool_estandar else destacado
+        item = _elegir_por_probabilidad(pool_estandar) or destacado
         return item, False
 
     if banner.tipo == 'arma':
         destacado = next((i for i in items_5e if i.es_destacado), None)
         return destacado, None
 
-    item = random.choice(items_5e) if items_5e else None
+    item = _elegir_por_probabilidad(items_5e)
     return item, None
 
 
@@ -72,7 +80,7 @@ def simular_una_tirada(banner, estado):
 
     if salio_cuatro:
         items_4e = list(banner.items.filter(rareza=4))
-        item = random.choice(items_4e) if items_4e else None
+        item = _elegir_por_probabilidad(items_4e)
         pity_de_esta_tirada = estado.pity_actual
         estado.pity_4_actual = 0
         return {

@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
@@ -55,11 +56,26 @@ class Item(models.Model):
         default=False,
         help_text='Marca si es el item destacado (rate-up) de su banner.',
     )
-    banner = models.ForeignKey(Banner, on_delete=models.CASCADE, related_name='items')
+    probabilidad = models.PositiveSmallIntegerField(
+        default=10,
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
+        help_text='Valor de 1 a 100. Mientras mas alto, mas seguido sale este item '
+                  'frente a los demas de su misma rareza en el banner.',
+    )
+    # PROTECT: no se puede eliminar un banner que todavia tiene items.
+    banner = models.ForeignKey(Banner, on_delete=models.PROTECT, related_name='items')
 
     def __str__(self):
         return self.nombre
-    
+
+    def probabilidad_real(self):
+        """Porcentaje real con que sale este item cuando cae un item de su rareza en su banner."""
+        competidores = [i for i in self.banner.items.all() if i.rareza == self.rareza]
+        total = sum(i.probabilidad for i in competidores)
+        if total == 0:
+            return 0
+        return round(self.probabilidad * 100 / total, 1)
+
     def save(self, *args, **kwargs):
         if not self.slug:
             base = slugify(self.nombre) or 'item'
@@ -74,7 +90,7 @@ class Item(models.Model):
 
 class EstadoPity(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    banner = models.ForeignKey(Banner, on_delete=models.CASCADE)
+    banner = models.ForeignKey(Banner, on_delete=models.PROTECT)
     pity_actual = models.IntegerField(default=0)
     pity_4_actual = models.IntegerField(default=0)
     garantizado = models.BooleanField(
@@ -92,8 +108,8 @@ class EstadoPity(models.Model):
 
 class Tirada(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tiradas')
-    banner = models.ForeignKey(Banner, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    banner = models.ForeignKey(Banner, on_delete=models.PROTECT)
+    item = models.ForeignKey(Item, on_delete=models.PROTECT)
     pity_en_momento = models.IntegerField()
     gano_50_50 = models.BooleanField(
         null=True, blank=True,
