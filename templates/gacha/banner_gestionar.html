@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block titulo %}Gestionar banners{% endblock %}
+
+{% block contenido %}
+<header class="cabecera-pagina cabecera-flex">
+    <div>
+        <span class="etiqueta">Gestión</span>
+        <h1>Banners</h1>
+        <p>{% if user.is_superuser %}Crea, edita y elimina banners.{% else %}Edita los datos de los banners existentes.{% endif %}</p>
+    </div>
+    {% if user.is_superuser %}
+    <a href="{% url 'gacha:banner_crear' %}" class="btn-w btn-w--cian">+ Crear banner</a>
+    {% endif %}
+</header>
+
+{% include "includes/tabs_gestion.html" with activa="banners" %}
+
+{% if banners %}
+<div class="tabla-wrap">
+    <table class="tabla-historial tabla-gestion">
+        <thead>
+            <tr>
+                <th>Banner</th>
+                <th>Tipo</th>
+                <th>Items</th>
+                <th>Destacado</th>
+                <th class="derecha">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banner in banners %}
+            <tr>
+                <td><a class="nombre-item" href="{% url 'gacha:banner_detalle' banner.id %}">{{ banner.nombre }}</a></td>
+                <td>{{ banner.get_tipo_display }}</td>
+                <td>{{ banner.items.all|length }}</td>
+                <td class="apagado">{% with d=banner.item_destacado %}{% if d %}{{ d.nombre }}{% else %}—{% endif %}{% endwith %}</td>
+                <td>
+                    <div class="acciones-fila">
+                        <a href="{% url 'gacha:banner_detalle' banner.id %}" class="btn-w btn-w--fantasma btn-w--sm">Ver</a>
+                        <a href="{% url 'gacha:banner_editar' banner.id %}" class="btn-w btn-w--cian btn-w--sm">Editar</a>
+                        {% if user.is_superuser %}
+                        <form method="post" action="{% url 'gacha:banner_eliminar' banner.id %}"
+                              data-titulo="¿Eliminar banner?"
+                              data-confirmar="Se eliminará el banner «{{ banner.nombre }}». Esta acción no se puede deshacer.">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-w btn-w--peligro btn-w--sm">Eliminar</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="vacio">No hay banners todavía.</div>
+{% endif %}
+{% endblock %}

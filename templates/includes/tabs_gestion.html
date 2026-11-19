@@ -1,0 +1,5 @@
+{# Pestañas de las paginas de gestion. Parametro: activa ("items" o "banners"). #}
+<nav class="tabs-gestion" aria-label="Gestión">
+    <a class="tab-g{% if activa == 'items' %} activa{% endif %}" href="{% url 'gacha:item_gestionar' %}">Personajes y armas</a>
+    <a class="tab-g{% if activa == 'banners' %} activa{% endif %}" href="{% url 'gacha:banner_gestionar' %}">Banners</a>
+</nav>

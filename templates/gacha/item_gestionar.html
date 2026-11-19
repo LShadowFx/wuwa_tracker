@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block titulo %}Gestionar personajes y armas{% endblock %}
+
+{% block contenido %}
+<header class="cabecera-pagina cabecera-flex">
+    <div>
+        <span class="etiqueta">Gestión</span>
+        <h1>Personajes y armas</h1>
+        <p>{% if user.is_superuser %}Crea, edita y elimina items del catálogo.{% else %}Edita los datos de los items existentes, incluida su probabilidad.{% endif %}</p>
+    </div>
+    {% if user.is_superuser %}
+    <a href="{% url 'gacha:item_crear' %}" class="btn-w btn-w--cian">+ Crear personaje o arma</a>
+    {% endif %}
+</header>
+
+{% include "includes/tabs_gestion.html" with activa="items" %}
+
+<p class="apagado nota-historial">«Probabilidad» es el porcentaje real con que sale cada item entre los de su misma rareza en su banner. El destacado no usa este valor.</p>
+
+{% if items %}
+<div class="tabla-wrap">
+    <table class="tabla-historial tabla-gestion">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Categoría</th>
+                <th>Rareza</th>
+                <th>Banner</th>
+                <th>Probabilidad</th>
+                <th class="derecha">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr class="{% if item.rareza == 5 %}fila-5{% endif %}">
+                <td>
+                    <img class="thumb" src="{{ item.imagen.url }}" alt="">
+                    <a class="nombre-item" href="{% url 'gacha:item_detalle' item.slug %}">{{ item.nombre }}</a>
+                </td>
+                <td>{{ item.get_categoria_display }}</td>
+                <td><span class="estrellas estrellas--{{ item.rareza }}">{% include "includes/estrellas.html" with rareza=item.rareza %}</span></td>
+                <td class="apagado">{{ item.banner.nombre }}</td>
+                <td>
+                    {% if item.es_destacado %}
+                    <span class="sello sello--gana" style="margin:0">Destacado</span>
+                    {% else %}
+                    <b>{{ item.probabilidad_real|floatformat:"-1" }}%</b> <span class="apagado">(valor {{ item.probabilidad }})</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="acciones-fila">
+                        <a href="{% url 'gacha:item_detalle' item.slug %}" class="btn-w btn-w--fantasma btn-w--sm">Ver</a>
+                        <a href="{% url 'gacha:item_editar' item.id %}" class="btn-w btn-w--cian btn-w--sm">Editar</a>
+                        {% if user.is_superuser %}
+                        <form method="post" action="{% url 'gacha:item_eliminar' item.id %}"
+                              data-titulo="¿Eliminar {{ item.get_categoria_display|lower }}?"
+                              data-confirmar="Se eliminará «{{ item.nombre }}». Esta acción no se puede deshacer.">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-w btn-w--peligro btn-w--sm">Eliminar</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="vacio">No hay personajes ni armas todavía.</div>
+{% endif %}
+{% endblock %}

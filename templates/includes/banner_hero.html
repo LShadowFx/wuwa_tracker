@@ -43,6 +43,24 @@
             <a href="{% url 'cuentas:login' %}?next={{ request.path|urlencode }}" class="btn-w btn-w--fantasma">&#128274; Inicia sesión para tirar</a>
             {% endif %}
         </div>
+
+        {# Botones de gestion: solo en el detalle, y segun el perfil #}
+        {% if not compacto %}
+        {% if user.is_staff or user.is_superuser %}
+        <div class="pull-actions pull-actions--gestion">
+            <a href="{% url 'gacha:banner_editar' banner.id %}" class="btn-w btn-w--fantasma btn-w--sm">Editar banner</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'gacha:item_crear' %}?banner={{ banner.id }}" class="btn-w btn-w--fantasma btn-w--sm">+ Agregar personaje o arma</a>
+            <form method="post" action="{% url 'gacha:banner_eliminar' banner.id %}"
+                  data-titulo="¿Eliminar banner?"
+                  data-confirmar="Se eliminará el banner «{{ banner.nombre }}». Esta acción no se puede deshacer.">
+                {% csrf_token %}
+                <button type="submit" class="btn-w btn-w--peligro btn-w--sm">Eliminar banner</button>
+            </form>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
     </div>
 </section>
 {% endwith %}

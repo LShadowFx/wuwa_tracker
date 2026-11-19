@@ -7,6 +7,7 @@
 {% include "includes/banner_hero.html" with compacto=False %}
 
 <div class="roster">
+    <p class="apagado nota-prob">«Prob.» es el porcentaje con que sale cada item cuando cae un item de su misma rareza en este banner.</p>
     {# Ordenamos de mayor a menor rareza y agrupamos para mostrar 5★ y 4★ por separado #}
     {% regroup banner.items.all|dictsortreversed:"rareza" by rareza as grupos %}
     {% for grupo in grupos %}
@@ -17,7 +18,7 @@
     </div>
     <div class="roster-grid">
         {% for item in grupo.list %}
-        {% include "includes/tarjeta_item.html" %}
+        {% include "includes/tarjeta_item.html" with mostrar_prob=True %}
         {% endfor %}
     </div>
     {% empty %}

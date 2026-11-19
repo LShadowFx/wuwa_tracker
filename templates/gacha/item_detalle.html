@@ -27,6 +27,9 @@
             {% if item.ataque_base %}
             <div><dt>Ataque base (nivel 90)</dt><dd>{{ item.ataque_base }}</dd></div>
             {% endif %}
+            {% if not item.es_destacado %}
+            <div><dt>Probabilidad en su banner</dt><dd>{{ item.probabilidad_real|floatformat:"-1" }}% <span class="apagado">(valor {{ item.probabilidad }})</span></dd></div>
+            {% endif %}
             <div><dt>Banner</dt><dd><a href="{% url 'gacha:banner_detalle' item.banner.id %}">{{ item.banner.nombre }}</a> ({{ item.banner.get_tipo_display }})</dd></div>
             <div><dt>Veces obtenido (todos los usuarios)</dt><dd>{{ veces_obtenido }}</dd></div>
             {% if mis_copias is not None %}
@@ -38,6 +41,21 @@
             <a href="{% url 'gacha:banner_detalle' item.banner.id %}" class="btn-w btn-w--cian">Ver banner</a>
             <a href="{% url 'gacha:catalogo' %}" class="btn-w btn-w--fantasma">Volver al catálogo</a>
         </div>
+
+        {# Staff y admin editan; solo el admin elimina #}
+        {% if user.is_staff or user.is_superuser %}
+        <div class="pull-actions pull-actions--gestion">
+            <a href="{% url 'gacha:item_editar' item.id %}" class="btn-w btn-w--fantasma btn-w--sm">Editar</a>
+            {% if user.is_superuser %}
+            <form method="post" action="{% url 'gacha:item_eliminar' item.id %}"
+                  data-titulo="¿Eliminar {{ item.get_categoria_display|lower }}?"
+                  data-confirmar="Se eliminará «{{ item.nombre }}». Esta acción no se puede deshacer.">
+                {% csrf_token %}
+                <button type="submit" class="btn-w btn-w--peligro btn-w--sm">Eliminar</button>
+            </form>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

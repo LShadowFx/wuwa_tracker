@@ -43,6 +43,17 @@
 <div class="vacio">Todavía no has tirado en ningún banner. <a href="{% url 'gacha:banners' %}">Ir a los banners</a></div>
 {% endif %}
 
+<h2 class="titulo-seccion">Mi colección</h2>
+{% if coleccion %}
+<div class="roster-grid roster-grid--catalogo">
+    {% for item in coleccion %}
+    {% include "includes/tarjeta_item.html" with mostrar_banner=True copias=item.copias %}
+    {% endfor %}
+</div>
+{% else %}
+<div class="vacio">Todavía no has obtenido ningún personaje ni arma.</div>
+{% endif %}
+
 <h2 class="titulo-seccion">Últimas tiradas</h2>
 {% if total_tiradas > limite %}
 <p class="apagado nota-historial">Mostrando las {{ limite }} más recientes de {{ total_tiradas }} tiradas guardadas.</p>

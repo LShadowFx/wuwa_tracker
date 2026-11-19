@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}Acceso denegado{% endblock %}
+
+{% block contenido %}
+<div class="auth-fondo">
+    <div class="auth-panel">
+        <span class="etiqueta">Error 403</span>
+        <h1>Acceso denegado</h1>
+        <p class="sub">Tu perfil no tiene permiso para realizar esta acción.</p>
+        <a href="{% url 'gacha:catalogo' %}" class="btn-w btn-w--cian btn-w--block">Volver al catálogo</a>
+    </div>
+</div>
+{% endblock %}

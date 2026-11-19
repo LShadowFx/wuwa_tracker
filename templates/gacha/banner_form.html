@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags crispy_forms_filters %}
+{% block titulo %}{% if editando %}Editar banner{% else %}Crear banner{% endif %}{% endblock %}
+
+{% block contenido %}
+<div class="auth-fondo">
+    <div class="auth-panel auth-panel--ancho">
+        <span class="etiqueta">{% if editando %}Edición{% else %}Convocación{% endif %}</span>
+        <h1>{% if editando %}Editar {{ nombre_original }}{% else %}Crear banner{% endif %}</h1>
+        <p class="sub">
+            {% if editando %}Cambia lo que necesites y guarda.
+            {% else %}Primero se crea el banner; después le agregas sus personajes o armas.{% endif %}
+        </p>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.nombre|as_crispy_field }}
+            {{ form.tipo|as_crispy_field }}
+            {{ form.descripcion|as_crispy_field }}
+
+            <div class="acciones-form">
+                <button type="submit" class="btn-w btn-w--cian">{% if editando %}Guardar cambios{% else %}Crear banner{% endif %}</button>
+                {% if editando %}
+                <a href="{% url 'gacha:banner_detalle' banner_id %}" class="btn-w btn-w--fantasma">Cancelar</a>
+                {% else %}
+                <a href="{% url 'gacha:banner_gestionar' %}" class="btn-w btn-w--fantasma">Cancelar</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -8,10 +8,8 @@
         <h1>Catálogo</h1>
         <p>Explora los personajes y armas disponibles. Entra al detalle de cada uno para ver su información.</p>
     </div>
-    {% if user.is_authenticated %}
-    <a href="{% url 'gacha:item_crear' %}" class="btn-w btn-w--cian">+ Crear personaje</a>
-    {% else %}
-    <a href="{% url 'cuentas:login' %}?next={% url 'gacha:item_crear' %}" class="btn-w btn-w--fantasma">&#128274; Inicia sesión para crear</a>
+    {% if user.is_superuser %}
+    <a href="{% url 'gacha:item_crear' %}" class="btn-w btn-w--cian">+ Crear personaje o arma</a>
     {% endif %}
 </header>
 
