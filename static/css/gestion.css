@@ -233,3 +233,25 @@
         font-size: 0.95rem;
     }
 }
+
+/* ---- Vista previa de la probabilidad en el formulario ---- */
+.prob-preview {
+    margin: 0 0 0.9rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    border: 1px solid var(--line-fuerte);
+    border-left: 3px solid var(--cian);
+    border-radius: 4px;
+    background: rgba(46, 190, 205, 0.07);
+}
+
+.prob-preview b {
+    color: var(--cian);
+}
+
+.prob-preview ul {
+    margin: 0.4rem 0 0;
+    padding-left: 1.2rem;
+    color: var(--apagado);
+    font-size: 0.88rem;
+}

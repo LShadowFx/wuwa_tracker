@@ -27,6 +27,19 @@ def _cuenta(n, singular, plural):
     return f'{n} {singular if n == 1 else plural}'
 
 
+def _grupos_probabilidad():
+    """Items agrupados por banner, para la vista previa de probabilidad del formulario."""
+    grupos = {}
+    for item in Item.objects.only('id', 'nombre', 'rareza', 'probabilidad', 'banner_id'):
+        grupos.setdefault(str(item.banner_id), []).append({
+            'id': item.id,
+            'nombre': item.nombre,
+            'rareza': item.rareza,
+            'peso': item.probabilidad,
+        })
+    return grupos
+
+
 # ---------------------------------------------------------------------------
 # Catalogo (publico, solo lectura)
 # ---------------------------------------------------------------------------
@@ -105,7 +118,11 @@ def item_crear(request):
     else:
         # Si se llega desde un banner (?banner=<id>) se deja ese banner preseleccionado.
         form = ItemForm(initial={'banner': request.GET.get('banner')})
-    return render(request, 'gacha/item_form.html', {'form': form, 'editando': False})
+    return render(request, 'gacha/item_form.html', {
+        'form': form,
+        'editando': False,
+        'grupos_prob': _grupos_probabilidad(),
+    })
 
 
 @login_required
@@ -133,6 +150,8 @@ def item_editar(request, id):
         'nombre_original': nombre_original,
         'slug_original': slug,
         'imagen_actual': Item.objects.get(id=id).imagen,
+        'item_id': id,
+        'grupos_prob': _grupos_probabilidad(),
     })
 
 

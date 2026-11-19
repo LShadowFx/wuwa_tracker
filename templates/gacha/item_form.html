@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags crispy_forms_filters %}
 {% block titulo %}{% if editando %}Editar {{ nombre_original }}{% else %}Crear personaje o arma{% endif %}{% endblock %}
 
@@ -37,6 +38,9 @@
                 <legend><span class="paso">3</span> Probabilidad</legend>
                 <div class="prob-caja">
                     {{ form.probabilidad|as_crispy_field }}
+                    {# Vista previa: se actualiza sola al escribir (js/prob_vista_previa.js) #}
+                    <div class="prob-preview" id="probPreview" aria-live="polite"
+                         data-item-id="{{ item_id|default:'' }}"></div>
                     <p class="prob-ejemplo">
                         <b>Ejemplo:</b> si un banner tiene dos items de 4★, uno con <b>30</b> y otro con <b>10</b>,
                         el primero sale el <b>75 %</b> de las veces y el segundo el <b>25 %</b>.
@@ -73,4 +77,9 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ grupos_prob|json_script:"datos-prob" }}
+<script src="{% static 'js/prob_vista_previa.js' %}"></script>
 {% endblock %}
