@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block titulo %}Gestionar banners{% endblock %}
 
 {% block contenido %}
@@ -15,7 +16,27 @@
 
 {% include "includes/tabs_gestion.html" with activa="banners" %}
 
-{% if banners %}
+{# Buscador y filtro de tipo, aplicados en vivo (js/filtros_vivos.js) #}
+<form method="get" class="filtros" id="filtrosGestion" data-filtros-vivos data-resultados="resultadosGestion" aria-label="Filtros de banners">
+    <div class="filtro-campo filtro-campo--ancho">
+        <label class="form-label" for="{{ filtro.q.id_for_label }}">{{ filtro.q.label }}</label>
+        {{ filtro.q }}
+    </div>
+    <div class="filtro-campo">
+        <label class="form-label" for="{{ filtro.tipo.id_for_label }}">{{ filtro.tipo.label }}</label>
+        {{ filtro.tipo }}
+    </div>
+    <div class="filtro-acciones">
+        <button type="submit" class="btn-w btn-w--cian btn-w--sm">Filtrar</button>
+        <a href="{% url 'gacha:banner_gestionar' %}" class="btn-w btn-w--fantasma btn-w--sm">Limpiar</a>
+    </div>
+</form>
+
+{# Esta zona se actualiza sola al cambiar un filtro #}
+<div id="resultadosGestion" aria-live="polite">
+<p class="apagado conteo">{{ total }} resultado{{ total|pluralize }}</p>
+
+{% if pagina %}
 <div class="tabla-wrap">
     <table class="tabla-historial tabla-gestion">
         <thead>
@@ -28,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for banner in banners %}
+            {% for banner in pagina %}
             <tr>
                 <td><a class="nombre-item" href="{% url 'gacha:banner_detalle' banner.id %}">{{ banner.nombre }}</a></td>
                 <td>{{ banner.get_tipo_display }}</td>
@@ -53,7 +74,13 @@
         </tbody>
     </table>
 </div>
+{% include "includes/paginacion.html" %}
 {% else %}
-<div class="vacio">No hay banners todavía.</div>
+<div class="vacio">No hay banners que coincidan con los filtros. <a href="{% url 'gacha:banner_gestionar' %}">Ver todos</a></div>
 {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/filtros_vivos.js' %}"></script>
 {% endblock %}

@@ -8,10 +8,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from .models import Banner, Item, Tirada, EstadoPity
-from .forms import SimularTiradaForm, ItemForm, BannerForm, FiltroCatalogoForm, ORDEN_CATALOGO
+from .forms import (
+    SimularTiradaForm, ItemForm, BannerForm, FiltroCatalogoForm, FiltroBannerForm, ORDEN_CATALOGO,
+)
 from .pity import simular_tiradas
 
 ITEMS_POR_PAGINA = 12
+GESTION_POR_PAGINA = 10
 TIRADAS_EN_DASHBOARD = 10
 
 # ---------------------------------------------------------------------------
@@ -28,16 +31,34 @@ def _cuenta(n, singular, plural):
 
 
 def _grupos_probabilidad():
-    """Items agrupados por banner, para la vista previa de probabilidad del formulario."""
-    grupos = {}
-    for item in Item.objects.only('id', 'nombre', 'rareza', 'probabilidad', 'banner_id'):
-        grupos.setdefault(str(item.banner_id), []).append({
-            'id': item.id,
-            'nombre': item.nombre,
-            'rareza': item.rareza,
-            'peso': item.probabilidad,
+    """Datos de todos los banners para el JS del formulario de items (reglas y vista previa).
+
+    Formato: {banner_id: {'tipo': ..., 'items': [...]}}. Se incluyen tambien los banners
+    sin items, porque igual hay que saber su tipo para aplicar las reglas.
+    """
+    grupos = {
+        str(b.id): {'tipo': b.tipo, 'items': []}
+        for b in Banner.objects.only('id', 'tipo')
+    }
+    for item in Item.objects.only('id', 'nombre', 'rareza', 'probabilidad', 'categoria',
+                                  'es_destacado', 'banner_id'):
+        grupos[str(item.banner_id)]['items'].append({
+            'id': item.id, 'nombre': item.nombre, 'rareza': item.rareza,
+            'peso': item.probabilidad, 'categoria': item.categoria,
+            'destacado': item.es_destacado,
         })
     return grupos
+
+
+def _resumen_items_banner(banner):
+    """Lo que tiene hoy un banner, para que el JS repita BannerForm.clean() al cambiar el tipo."""
+    items = list(banner.items.all())
+    return {
+        'personajes': sum(1 for i in items if i.categoria == 'personaje'),
+        'armas': sum(1 for i in items if i.categoria == 'arma'),
+        'destacados': sum(1 for i in items if i.es_destacado),
+        'cinco_sin_destacado': sum(1 for i in items if i.rareza == 5 and not i.es_destacado),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -94,12 +115,44 @@ def item_detalle(request, slug):
 # ---------------------------------------------------------------------------
 @login_required
 def item_gestionar(request):
-    """Tabla de gestion de items. La ven staff y admin."""
+    """Tabla de gestion de items. La ven staff y admin.
+
+    Usa el mismo formulario de filtros y el mismo orden que el catalogo
+    (FiltroCatalogoForm / ORDEN_CATALOGO), y se filtra/pagina igual: 10 items
+    por pagina, con el mismo mecanismo de filtros en vivo (ver
+    static/js/filtros_vivos.js).
+    """
     if not (request.user.is_staff or request.user.is_superuser):
         raise PermissionDenied
 
-    items = Item.objects.prefetch_related('banner__items').order_by('banner__nombre', '-rareza', 'nombre')
-    return render(request, 'gacha/item_gestionar.html', {'items': items})
+    filtro = FiltroCatalogoForm(request.GET)
+    items = Item.objects.select_related('banner').prefetch_related('banner__items')
+    orden = 'recientes'
+
+    if filtro.is_valid():
+        datos = filtro.cleaned_data
+        if datos['q']:
+            items = items.filter(nombre__icontains=datos['q'].strip())
+        if datos['categoria']:
+            items = items.filter(categoria=datos['categoria'])
+        if datos['rareza']:
+            items = items.filter(rareza=int(datos['rareza']))
+        if datos['banner']:
+            items = items.filter(banner=datos['banner'])
+        orden = datos['orden'] or 'recientes'
+
+    items = items.order_by(*ORDEN_CATALOGO[orden])
+    pagina = Paginator(items, GESTION_POR_PAGINA).get_page(request.GET.get('page'))
+
+    params = request.GET.copy()
+    params.pop('page', None)
+
+    return render(request, 'gacha/item_gestionar.html', {
+        'filtro': filtro,
+        'pagina': pagina,
+        'total': pagina.paginator.count,
+        'querystring': params.urlencode(),
+    })
 
 
 @login_required
@@ -201,12 +254,31 @@ def banner_detalle(request, banner_id):
 
 @login_required
 def banner_gestionar(request):
-    """Tabla de gestion de banners. La ven staff y admin."""
+    """Tabla de gestion de banners. La ven staff y admin. Busca, filtra y pagina como la de items."""
     if not (request.user.is_staff or request.user.is_superuser):
         raise PermissionDenied
 
-    lista = Banner.objects.prefetch_related('items').order_by('nombre')
-    return render(request, 'gacha/banner_gestionar.html', {'banners': lista})
+    filtro = FiltroBannerForm(request.GET)
+    lista = Banner.objects.prefetch_related('items')
+
+    if filtro.is_valid():
+        datos = filtro.cleaned_data
+        if datos['q']:
+            lista = lista.filter(nombre__icontains=datos['q'].strip())
+        if datos['tipo']:
+            lista = lista.filter(tipo=datos['tipo'])
+
+    pagina = Paginator(lista.order_by('nombre'), GESTION_POR_PAGINA).get_page(request.GET.get('page'))
+
+    params = request.GET.copy()
+    params.pop('page', None)
+
+    return render(request, 'gacha/banner_gestionar.html', {
+        'filtro': filtro,
+        'pagina': pagina,
+        'total': pagina.paginator.count,
+        'querystring': params.urlencode(),
+    })
 
 
 @login_required
@@ -253,6 +325,7 @@ def banner_editar(request, id):
         'editando': True,
         'banner_id': id,
         'nombre_original': nombre_original,
+        'resumen_items': _resumen_items_banner(banner),
     })
 
 

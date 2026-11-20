@@ -14,7 +14,7 @@
     {% endif %}
 </header>
 
-<form method="get" class="filtros" id="filtrosCatalogo" aria-label="Filtros del catálogo">
+<form method="get" class="filtros" id="filtrosCatalogo" data-filtros-vivos data-resultados="resultados" aria-label="Filtros del catálogo">
     <div class="filtro-campo filtro-campo--ancho">
         <label class="form-label" for="{{ filtro.q.id_for_label }}">{{ filtro.q.label }}</label>
         {{ filtro.q }}

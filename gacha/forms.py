@@ -142,6 +142,20 @@ class ItemForm(forms.ModelForm):
         self.fields['categoria'].choices = [('', 'Selecciona una categoría')] + list(CATEGORIA_ITEM)
         self.fields['rareza'].choices = [('', 'Selecciona la rareza'), (4, '4 estrellas'), (5, '5 estrellas')]
 
+        # El destacado de un banner limitado es su unico 5★: si se le cambia el banner, la
+        # rareza o la marca de destacado, el banner se queda sin 5★ (y el pity de ese banner
+        # no tendria que entregar). Por eso esos tres campos quedan fijos al editarlo.
+        # Un campo "disabled" ignora lo que llegue por POST y usa el valor guardado, asi que
+        # esto no se puede saltar con un formulario modificado.
+        self.destacado_fijo = bool(
+            self.instance.pk
+            and self.instance.es_destacado
+            and self.instance.banner.tipo != 'permanente'
+        )
+        if self.destacado_fijo:
+            for nombre in ('banner', 'rareza', 'es_destacado'):
+                self.fields[nombre].disabled = True
+
     def clean_nombre(self):
         nombre = ' '.join(self.cleaned_data['nombre'].split())
         if len(nombre) < 2:
@@ -224,6 +238,21 @@ ORDEN_CATALOGO = {
     'rareza': ('-rareza', 'nombre'),
     'nombre': ('nombre',),
 }
+
+
+class FiltroBannerForm(forms.Form):
+    """Buscador y filtro de la tabla de gestion de banners."""
+
+    q = forms.CharField(required=False, max_length=100, label='Buscar')
+    tipo = forms.ChoiceField(
+        required=False, label='Tipo',
+        choices=[('', 'Todos')] + list(TIPO_BANNER),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['q'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Buscar por nombre'})
+        self.fields['tipo'].widget.attrs['class'] = 'form-select'
 
 
 class FiltroCatalogoForm(forms.Form):

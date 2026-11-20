@@ -30,7 +30,11 @@
                 <legend><span class="paso">2</span> Banner</legend>
                 <div class="form-grid">
                     <div class="span-2">{{ form.banner|as_crispy_field }}</div>
-                    <div class="span-2">{{ form.es_destacado|as_crispy_field }}</div>
+                    <div class="span-2" id="envoltorioDestacado">{{ form.es_destacado|as_crispy_field }}</div>
+                    {# Aviso en vivo de las reglas del destacado (js/prob_vista_previa.js) #}
+                    <div class="span-2 aviso-regla{% if form.destacado_fijo %} aviso-regla--info{% endif %}" id="avisoDestacado" role="alert"{% if not form.destacado_fijo %} hidden{% endif %}>
+                        {% if form.destacado_fijo %}Este item es el destacado de «{{ form.instance.banner.nombre }}»: su banner, su rareza y la marca de destacado quedan fijos, para que el banner no se quede sin 5★.{% endif %}
+                    </div>
                 </div>
             </fieldset>
 

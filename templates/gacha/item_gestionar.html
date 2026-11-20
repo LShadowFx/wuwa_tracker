@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block titulo %}Gestionar personajes y armas{% endblock %}
 
 {% block contenido %}
@@ -17,7 +18,39 @@
 
 <p class="apagado nota-historial">«Probabilidad» es el porcentaje real con que sale cada item entre los de su misma rareza en su banner. El destacado no usa este valor.</p>
 
-{% if items %}
+{# Mismo formulario de filtros que el catalogo (FiltroCatalogoForm), aplicados en vivo #}
+<form method="get" class="filtros" id="filtrosGestion" data-filtros-vivos data-resultados="resultadosGestion" aria-label="Filtros de gestión">
+    <div class="filtro-campo filtro-campo--ancho">
+        <label class="form-label" for="{{ filtro.q.id_for_label }}">{{ filtro.q.label }}</label>
+        {{ filtro.q }}
+    </div>
+    <div class="filtro-campo">
+        <label class="form-label" for="{{ filtro.categoria.id_for_label }}">{{ filtro.categoria.label }}</label>
+        {{ filtro.categoria }}
+    </div>
+    <div class="filtro-campo">
+        <label class="form-label" for="{{ filtro.rareza.id_for_label }}">{{ filtro.rareza.label }}</label>
+        {{ filtro.rareza }}
+    </div>
+    <div class="filtro-campo">
+        <label class="form-label" for="{{ filtro.banner.id_for_label }}">{{ filtro.banner.label }}</label>
+        {{ filtro.banner }}
+    </div>
+    <div class="filtro-campo">
+        <label class="form-label" for="{{ filtro.orden.id_for_label }}">{{ filtro.orden.label }}</label>
+        {{ filtro.orden }}
+    </div>
+    <div class="filtro-acciones">
+        <button type="submit" class="btn-w btn-w--cian btn-w--sm">Filtrar</button>
+        <a href="{% url 'gacha:item_gestionar' %}" class="btn-w btn-w--fantasma btn-w--sm">Limpiar</a>
+    </div>
+</form>
+
+{# Esta zona se actualiza sola al cambiar un filtro (ver js/filtros_vivos.js) #}
+<div id="resultadosGestion" aria-live="polite">
+<p class="apagado conteo">{{ total }} resultado{{ total|pluralize }}</p>
+
+{% if pagina %}
 <div class="tabla-wrap">
     <table class="tabla-historial tabla-gestion">
         <thead>
@@ -31,7 +64,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in items %}
+            {% for item in pagina %}
             <tr class="{% if item.rareza == 5 %}fila-5{% endif %}">
                 <td>
                     <img class="thumb" src="{{ item.imagen.url }}" alt="">
@@ -66,7 +99,13 @@
         </tbody>
     </table>
 </div>
+{% include "includes/paginacion.html" %}
 {% else %}
-<div class="vacio">No hay personajes ni armas todavía.</div>
+<div class="vacio">No hay personajes ni armas que coincidan con los filtros. <a href="{% url 'gacha:item_gestionar' %}">Ver todos</a></div>
 {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/filtros_vivos.js' %}"></script>
 {% endblock %}

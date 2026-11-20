@@ -2,11 +2,12 @@
  * Confirmacion antes de eliminar.
  * Cualquier <form data-confirmar="texto" data-titulo="titulo"> abre un dialogo;
  * el formulario solo se envia si el usuario pulsa "Si, eliminar".
+ * Se escucha el evento en todo el documento (delegacion) para que tambien funcione con las
+ * filas que los filtros en vivo cargan despues, sin recargar la pagina.
  * (La validacion real de permisos y del borrado se hace igualmente en el servidor.)
  */
 (function () {
-    var formularios = document.querySelectorAll('form[data-confirmar]');
-    if (!formularios.length || typeof HTMLDialogElement === 'undefined') return;
+    if (typeof HTMLDialogElement === 'undefined') return;
 
     var dialogo = document.createElement('dialog');
     dialogo.className = 'dialogo-w';
@@ -22,14 +23,14 @@
     var texto = dialogo.querySelector('p');
     var pendiente = null;
 
-    formularios.forEach(function (form) {
-        form.addEventListener('submit', function (evento) {
-            evento.preventDefault();
-            pendiente = form;
-            titulo.textContent = form.dataset.titulo || '¿Eliminar?';
-            texto.textContent = form.dataset.confirmar || 'Esta acción no se puede deshacer.';
-            dialogo.showModal();
-        });
+    document.addEventListener('submit', function (evento) {
+        var form = evento.target;
+        if (!form.matches || !form.matches('form[data-confirmar]')) return;
+        evento.preventDefault();
+        pendiente = form;
+        titulo.textContent = form.dataset.titulo || '¿Eliminar?';
+        texto.textContent = form.dataset.confirmar || 'Esta acción no se puede deshacer.';
+        dialogo.showModal();
     });
 
     dialogo.addEventListener('click', function (evento) {

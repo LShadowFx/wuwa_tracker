@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags crispy_forms_filters %}
 {% block titulo %}{% if editando %}Editar banner{% else %}Crear banner{% endif %}{% endblock %}
 
@@ -16,6 +17,8 @@
             {% csrf_token %}
             {{ form.nombre|as_crispy_field }}
             {{ form.tipo|as_crispy_field }}
+            {# Aviso en vivo al cambiar el tipo (js/banner_reglas.js) #}
+            <div class="aviso-regla" id="avisoTipo" role="alert" hidden></div>
             {{ form.descripcion|as_crispy_field }}
 
             <div class="acciones-form">
@@ -29,4 +32,11 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% if editando %}
+{{ resumen_items|json_script:"datos-banner" }}
+<script src="{% static 'js/banner_reglas.js' %}"></script>
+{% endif %}
 {% endblock %}
