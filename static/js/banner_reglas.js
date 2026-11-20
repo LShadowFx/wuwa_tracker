@@ -1,13 +1,3 @@
-/*
- * Formulario de banners (solo al editar): reglas en vivo al cambiar el tipo.
- * Usa #datos-banner = { personajes, armas, destacados, cinco_sin_destacado } con lo que el
- * banner tiene hoy, y repite BannerForm.clean(). El servidor sigue validando de verdad.
- *
- *  - Permanente: no se puede si algun item es destacado.
- *  - Personaje / arma limitada: no se puede si tiene items de la otra categoria, ni si tiene
- *    algun 5★ que no sea el destacado.
- * Las opciones no disponibles se deshabilitan (la elegida se respeta) y se explica por que.
- */
 (function () {
     var datos = document.getElementById('datos-banner');
     var tipo = document.getElementById('id_tipo');
@@ -20,7 +10,6 @@
         return n + ' ' + (n === 1 ? singular : plural);
     }
 
-    // Devuelve el motivo por el que ese tipo no se puede elegir, o '' si se puede.
     function motivo(valor) {
         if (valor === 'permanente') {
             return d.destacados

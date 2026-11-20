@@ -1,21 +1,3 @@
-/*
- * Formulario de items: reglas en vivo + vista previa de probabilidad.
- * Usa #datos-prob = { banner_id: { tipo, items: [{id, nombre, rareza, peso, categoria, destacado}] } }.
- *
- * Es un espejo de ItemForm.clean() para que el error se vea al elegir, no al guardar.
- * El servidor sigue siendo el que valida de verdad.
- *
- *  - Categoria: un banner limitado solo admite su categoria. Las otras opciones se
- *    deshabilitan y, si ya hay una incompatible elegida, el campo se marca en rojo.
- *  - Destacado: el banner permanente no tiene; solo un 5★ puede serlo; en un banner limitado
- *    el 5★ es siempre el destacado (se marca solo y no se puede desmarcar); y si el banner
- *    ya tiene otro destacado, no se puede agregar otro 5★.
- *  - Si el item que se edita ya es el destacado de un banner limitado, el servidor deja
- *    banner, rareza y destacado fijos (campos "disabled") y aqui no se toca nada de eso.
- *
- * El checkbox del destacado no se marca como "disabled" (no viajaria en el POST): se cancela
- * el click y se deja el valor correcto puesto.
- */
 (function () {
     var datos = document.getElementById('datos-prob');
     var caja = document.getElementById('probPreview');
@@ -42,7 +24,6 @@
         return div.innerHTML;
     }
 
-    // ---- Datos del banner elegido ----
     function grupoBanner() {
         return grupos[banner.value] || null;
     }
@@ -57,7 +38,6 @@
         return banner.value && opcion ? opcion.text : 'este banner';
     }
 
-    // ---- Marcas en rojo y mensajes ----
     function envoltorio(campo) {
         return campo.closest('[id^="div_id_"]') || campo.parentElement;
     }
@@ -65,7 +45,7 @@
     function marcar(campo, texto) {
         if (!campo.classList.contains('is-invalid')) {
             campo.classList.add('is-invalid');
-            campo.dataset.candado = '1'; // solo se quita lo que puso este script
+            campo.dataset.candado = '1';
         }
         var nodo = document.getElementById('candado-' + campo.id);
         if (!nodo) {
@@ -94,14 +74,12 @@
         aviso.className = 'span-2 aviso-regla aviso-regla--' + (esError ? 'error' : 'info');
     }
 
-    // Deshabilita las opciones que no se pueden elegir (la ya elegida se respeta).
     function restringirOpciones(select, permitida) {
         Array.prototype.forEach.call(select.options, function (opcion) {
             opcion.disabled = !!opcion.value && opcion.value !== select.value && !permitida(opcion.value);
         });
     }
 
-    // valor: true/false = fijar la casilla en ese valor y bloquearla; null = dejarla libre.
     function fijarDestacado(valor) {
         var bloqueado = valor !== null;
         if (bloqueado) destacado.checked = valor;
@@ -109,7 +87,6 @@
         if (envoltorioDestacado) envoltorioDestacado.classList.toggle('chk-bloqueado', bloqueado);
     }
 
-    // ---- Reglas ----
     function aplicarReglas() {
         var grupo = grupoBanner();
         var tipo = grupo ? grupo.tipo : null;
@@ -119,14 +96,12 @@
         limpiar(categoria);
         limpiar(rareza);
 
-        // Categoria contra el tipo del banner.
         restringirOpciones(categoria, function (v) { return !limitado || v === tipo; });
         if (limitado && categoria.value && categoria.value !== tipo) {
             marcar(categoria, 'El banner «' + nombreBanner() + '» solo admite ' +
                 (tipo === 'personaje' ? 'personajes' : 'armas') + '.');
         }
 
-        // Si el servidor dejo el destacado fijo, el resto lo maneja el aviso del template.
         if (destacado.disabled) return;
 
         var otroDestacado = limitado
@@ -156,7 +131,6 @@
         }
     }
 
-    // ---- Vista previa de probabilidad ----
     function actualizarPreview() {
         if (destacado.checked) {
             caja.innerHTML = 'El item <b>destacado</b> no usa probabilidad: sale por la regla del banner (el 50/50).';
@@ -199,7 +173,6 @@
         actualizarPreview();
     }
 
-    // Casilla bloqueada: se cancela el click antes de que cambie.
     destacado.addEventListener('click', function (evento) {
         if (destacado.getAttribute('aria-disabled') === 'true') evento.preventDefault();
     });

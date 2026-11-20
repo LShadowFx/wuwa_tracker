@@ -1,11 +1,3 @@
-/*
- * Confirmacion antes de eliminar.
- * Cualquier <form data-confirmar="texto" data-titulo="titulo"> abre un dialogo;
- * el formulario solo se envia si el usuario pulsa "Si, eliminar".
- * Se escucha el evento en todo el documento (delegacion) para que tambien funcione con las
- * filas que los filtros en vivo cargan despues, sin recargar la pagina.
- * (La validacion real de permisos y del borrado se hace igualmente en el servidor.)
- */
 (function () {
     if (typeof HTMLDialogElement === 'undefined') return;
 

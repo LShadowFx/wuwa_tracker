@@ -19,7 +19,6 @@ def probabilidad_5_estrellas(pity_actual):
 
 
 def _elegir_por_probabilidad(items):
-    """Elige un item de la lista segun su campo `probabilidad` (a mayor valor, mas seguido sale)."""
     if not items:
         return None
     pesos = [item.probabilidad for item in items]

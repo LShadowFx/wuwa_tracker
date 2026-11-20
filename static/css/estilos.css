@@ -425,15 +425,6 @@ code {
     border-bottom: 2px solid var(--cian);
 }
 
-/* ---- Nota: .banner-hero--personaje/--arma/--permanente ya NO fijan su propio
-   background-image/size/position. Desde que el banner tiene portada propia
-   (Banner.imagen), el <section> siempre trae un background-image inline (el propio
-   o el generico por defecto; ver Banner.imagen_fondo_css() e includes/banner_hero.html),
-   y ese inline gana sobre cualquier regla de clase para la MISMA propiedad. Dejar fijos
-   esos tres valores habria recortado/desplazado cualquier imagen subida o la generica,
-   porque estaban ajustados a mano para los archivos puntuales que esto reemplaza
-   (banner-personaje.jpg, banner-arma.webp y el degradado violeta). El "cover"/"center"
-   de la regla base .banner-hero (mas arriba) ya sirve para cualquier imagen. ---- */
 
 .banner-hero--arma .banner-hero-overlay {
     background:
@@ -1442,7 +1433,6 @@ code {
     }
 }
 
-/* Lista desplegable (select) legible sobre el fondo oscuro */
 select,
 .form-select {
     color-scheme: dark;
@@ -1466,9 +1456,6 @@ select:focus,
 }
 
 
-/* =====================================================================
-   Catalogo, detalle de item/banner y formulario de creacion
-   ===================================================================== */
 .cabecera-flex {
     display: flex;
     align-items: flex-end;
@@ -1484,7 +1471,6 @@ select:focus,
     letter-spacing: 0.08em;
 }
 
-/* Filtros del catalogo */
 .filtros {
     display: flex;
     flex-wrap: wrap;
@@ -1516,7 +1502,6 @@ select:focus,
     font-size: 0.85rem;
 }
 
-/* Tarjetas del catalogo (reutilizan .eco del plantel de banners) */
 .roster-grid--catalogo {
     grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
     gap: 1rem;
@@ -1569,7 +1554,6 @@ a.eco:hover .eco-ver {
     color: var(--apagado);
 }
 
-/* Portada de banner en version compacta (listado de banners) */
 .banner-hero--compacto {
     min-height: 300px;
 }

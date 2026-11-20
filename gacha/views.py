@@ -17,13 +17,6 @@ ITEMS_POR_PAGINA = 12
 GESTION_POR_PAGINA = 10
 TIRADAS_EN_DASHBOARD = 10
 
-# ---------------------------------------------------------------------------
-# Perfiles (mismas banderas que usa el profe en su proyecto):
-#   Visitante : sin sesion.
-#   Jugador   : con sesion, is_staff=False, is_superuser=False.
-#   Staff     : is_staff=True. Solo puede VER y EDITAR (no crea ni elimina).
-#   Admin     : is_superuser=True. Hace todo el CRUD.
-# ---------------------------------------------------------------------------
 
 
 def _cuenta(n, singular, plural):
@@ -31,11 +24,6 @@ def _cuenta(n, singular, plural):
 
 
 def _grupos_probabilidad():
-    """Datos de todos los banners para el JS del formulario de items (reglas y vista previa).
-
-    Formato: {banner_id: {'tipo': ..., 'items': [...]}}. Se incluyen tambien los banners
-    sin items, porque igual hay que saber su tipo para aplicar las reglas.
-    """
     grupos = {
         str(b.id): {'tipo': b.tipo, 'items': []}
         for b in Banner.objects.only('id', 'tipo')
@@ -51,7 +39,6 @@ def _grupos_probabilidad():
 
 
 def _resumen_items_banner(banner):
-    """Lo que tiene hoy un banner, para que el JS repita BannerForm.clean() al cambiar el tipo."""
     items = list(banner.items.all())
     return {
         'personajes': sum(1 for i in items if i.categoria == 'personaje'),
@@ -61,11 +48,7 @@ def _resumen_items_banner(banner):
     }
 
 
-# ---------------------------------------------------------------------------
-# Catalogo (publico, solo lectura)
-# ---------------------------------------------------------------------------
 def catalogo(request):
-    """Listado compacto de personajes y armas. El detalle esta en otra pagina."""
     filtro = FiltroCatalogoForm(request.GET)
     items = Item.objects.select_related('banner')
     orden = 'recientes'
@@ -85,7 +68,6 @@ def catalogo(request):
     items = items.order_by(*ORDEN_CATALOGO[orden])
     pagina = Paginator(items, ITEMS_POR_PAGINA).get_page(request.GET.get('page'))
 
-    # Querystring de los filtros (sin "page") para conservarlos al cambiar de pagina.
     params = request.GET.copy()
     params.pop('page', None)
 
@@ -110,18 +92,8 @@ def item_detalle(request, slug):
     })
 
 
-# ---------------------------------------------------------------------------
-# CRUD de items (personajes y armas)
-# ---------------------------------------------------------------------------
 @login_required
 def item_gestionar(request):
-    """Tabla de gestion de items. La ven staff y admin.
-
-    Usa el mismo formulario de filtros y el mismo orden que el catalogo
-    (FiltroCatalogoForm / ORDEN_CATALOGO), y se filtra/pagina igual: 10 items
-    por pagina, con el mismo mecanismo de filtros en vivo (ver
-    static/js/filtros_vivos.js).
-    """
     if not (request.user.is_staff or request.user.is_superuser):
         raise PermissionDenied
 
@@ -157,7 +129,6 @@ def item_gestionar(request):
 
 @login_required
 def item_crear(request):
-    """Solo el admin crea items."""
     if not request.user.is_superuser:
         raise PermissionDenied
 
@@ -169,7 +140,6 @@ def item_crear(request):
             return redirect('gacha:item_detalle', slug=item.slug)
         messages.error(request, 'No se pudo guardar. Revisa los campos marcados.')
     else:
-        # Si se llega desde un banner (?banner=<id>) se deja ese banner preseleccionado.
         form = ItemForm(initial={'banner': request.GET.get('banner')})
     return render(request, 'gacha/item_form.html', {
         'form': form,
@@ -180,7 +150,6 @@ def item_crear(request):
 
 @login_required
 def item_editar(request, id):
-    """Staff y admin editan cualquier dato del item, incluida su probabilidad."""
     if not (request.user.is_staff or request.user.is_superuser):
         raise PermissionDenied
 
@@ -211,7 +180,6 @@ def item_editar(request, id):
 @login_required
 @require_POST
 def item_eliminar(request, id):
-    """Solo el admin elimina. Un item que ya salio en tiradas queda protegido."""
     if not request.user.is_superuser:
         raise PermissionDenied
 
@@ -228,17 +196,12 @@ def item_eliminar(request, id):
             f'({_cuenta(veces, "tirada", "tiradas")}).',
         )
         return redirect('gacha:item_detalle', slug=item.slug)
-    # Igual que el profe: se borra el archivo de la imagen, salvo la generica
-    # (o si otro item todavia usa el mismo archivo).
     if imagen and imagen.name != 'sin_imagen.jpg' and not Item.objects.filter(imagen=imagen.name).exists():
         imagen.delete(save=False)
     messages.success(request, f'Se eliminó «{nombre}» correctamente.')
     return redirect('gacha:item_gestionar')
 
 
-# ---------------------------------------------------------------------------
-# CRUD de banners
-# ---------------------------------------------------------------------------
 def banners(request):
     lista = Banner.objects.prefetch_related('items').all()
     return render(request, 'gacha/banners.html', {'banners': lista})
@@ -254,7 +217,6 @@ def banner_detalle(request, banner_id):
 
 @login_required
 def banner_gestionar(request):
-    """Tabla de gestion de banners. La ven staff y admin. Busca, filtra y pagina como la de items."""
     if not (request.user.is_staff or request.user.is_superuser):
         raise PermissionDenied
 
@@ -283,7 +245,6 @@ def banner_gestionar(request):
 
 @login_required
 def banner_crear(request):
-    """Solo el admin crea banners."""
     if not request.user.is_superuser:
         raise PermissionDenied
 
@@ -304,7 +265,6 @@ def banner_crear(request):
 
 @login_required
 def banner_editar(request, id):
-    """Staff y admin editan los datos del banner."""
     if not (request.user.is_staff or request.user.is_superuser):
         raise PermissionDenied
 
@@ -332,7 +292,6 @@ def banner_editar(request, id):
 @login_required
 @require_POST
 def banner_eliminar(request, id):
-    """Solo el admin elimina. Un banner con items o con tiradas queda protegido."""
     if not request.user.is_superuser:
         raise PermissionDenied
 
@@ -361,9 +320,6 @@ def banner_eliminar(request, id):
     return redirect('gacha:banner_gestionar')
 
 
-# ---------------------------------------------------------------------------
-# Tiradas (requieren sesion)
-# ---------------------------------------------------------------------------
 
 
 @login_required
@@ -428,7 +384,6 @@ def dashboard(request):
 
     historial = Tirada.objects.filter(usuario=request.user).select_related('banner', 'item')[:TIRADAS_EN_DASHBOARD]
 
-    # Personajes y armas que el jugador ya obtuvo, con cuantas copias tiene de cada uno.
     coleccion = (
         Item.objects.filter(tirada__usuario=request.user)
         .annotate(copias=Count('tirada'))
@@ -445,6 +400,5 @@ def dashboard(request):
 
 
 def feed_publico(request):
-    """El feed es publico: lo puede ver cualquiera, con o sin sesion."""
     tiradas = Tirada.objects.filter(compartida=True).select_related('usuario', 'banner', 'item')[:20]
     return render(request, 'gacha/feed.html', {'tiradas': tiradas})

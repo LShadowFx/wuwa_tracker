@@ -43,11 +43,6 @@ class Banner(models.Model):
         return None
 
     def imagen_portada_url(self):
-        """URL de la portada del banner: la propia si existe, si no la generica por defecto.
-
-        A proposito NO cae de vuelta a la imagen del item destacado (esa se sigue viendo
-        aparte, en el "destacado-pill"): la portada es del banner, no del item.
-        """
         if self.imagen:
             return self.imagen.url
         return static(BANNER_IMAGEN_DEFAULT)
@@ -79,14 +74,12 @@ class Item(models.Model):
         help_text='Valor de 1 a 100. Mientras mas alto, mas seguido sale este item '
                   'frente a los demas de su misma rareza en el banner.',
     )
-    # PROTECT: no se puede eliminar un banner que todavia tiene items.
     banner = models.ForeignKey(Banner, on_delete=models.PROTECT, related_name='items')
 
     def __str__(self):
         return self.nombre
 
     def probabilidad_real(self):
-        """Porcentaje real con que sale este item cuando cae un item de su rareza en su banner."""
         competidores = [i for i in self.banner.items.all() if i.rareza == self.rareza]
         total = sum(i.probabilidad for i in competidores)
         if total == 0:

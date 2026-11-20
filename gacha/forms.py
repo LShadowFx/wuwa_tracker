@@ -13,11 +13,6 @@ CANTIDAD_CHOICES = [
 EXTENSIONES_IMAGEN = ('.jpg', '.jpeg', '.png', '.webp')
 TAMANO_MAXIMO_IMAGEN = 2 * 1024 * 1024
 
-# Resolucion minima de la portada del banner. El banner-hero se ve a lo ancho del
-# contenedor (hasta 1140px) con "background-size: cover", en una franja de 1140x460px
-# (proporcion 2.48:1 aprox). Por eso se pide una imagen panoramica de al menos 1600x650
-# (holgada para que no se vea borrosa ni en pantallas grandes/retina), con una proporcion
-# parecida (entre 2:1 y 3:1): fuera de ese rango, "cover" recortaria demasiado la imagen.
 BANNER_IMG_ANCHO_MIN = 1200
 BANNER_IMG_ALTO_MIN = 500
 BANNER_IMG_RATIO_MIN = 1.7
@@ -29,7 +24,6 @@ BANNER_IMG_RESOLUCION_TEXTO = (
 
 
 def _validar_formato_y_peso(imagen):
-    """Formato y peso de imagen: regla compartida entre ItemForm y BannerForm."""
     if isinstance(imagen, UploadedFile):
         if not imagen.name.lower().endswith(EXTENSIONES_IMAGEN):
             raise forms.ValidationError('Formato no permitido: usa JPG, PNG o WEBP.')
@@ -57,7 +51,6 @@ class SimularTiradaForm(forms.Form):
 
 
 class BannerForm(forms.ModelForm):
-    """Formulario compartido para crear y editar banners."""
 
     class Meta:
         model = Banner
@@ -80,10 +73,6 @@ class BannerForm(forms.ModelForm):
         }
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 4}),
-            # ClearableFileInput (el default de Django para un ImageField opcional) ya trae
-            # el link a la imagen actual y la casilla "Clear" para quitarla: no hace falta
-            # nada hecho a mano para eso, a diferencia de ItemForm (que no la deja quitar
-            # porque siempre usa su 'sin_imagen.jpg' de respaldo).
             'imagen': forms.ClearableFileInput(attrs={'accept': 'image/png,image/jpeg,image/webp'}),
         }
 
@@ -114,7 +103,7 @@ class BannerForm(forms.ModelForm):
             try:
                 ancho, alto = Image.open(imagen).size
             finally:
-                imagen.seek(0)  # Image.open() deja el puntero movido; hay que rebobinarlo para guardarla bien.
+                imagen.seek(0)
             if ancho < BANNER_IMG_ANCHO_MIN or alto < BANNER_IMG_ALTO_MIN:
                 raise forms.ValidationError(
                     f'La imagen mide {ancho}×{alto} px; se necesita {BANNER_IMG_RESOLUCION_TEXTO}.'
@@ -130,7 +119,6 @@ class BannerForm(forms.ModelForm):
     def clean(self):
         datos = super().clean()
         tipo = datos.get('tipo')
-        # Al editar, el nuevo tipo no puede contradecir los items que el banner ya tiene.
         if self.instance.pk and tipo:
             items = self.instance.items.all()
             if tipo == 'permanente':
@@ -158,7 +146,6 @@ class BannerForm(forms.ModelForm):
 
 
 class ItemForm(forms.ModelForm):
-    """Formulario compartido para crear y editar items (personajes y armas)."""
 
     class Meta:
         model = Item
@@ -196,11 +183,6 @@ class ItemForm(forms.ModelForm):
         self.fields['categoria'].choices = [('', 'Selecciona una categoría')] + list(CATEGORIA_ITEM)
         self.fields['rareza'].choices = [('', 'Selecciona la rareza'), (4, '4 estrellas'), (5, '5 estrellas')]
 
-        # El destacado de un banner limitado es su unico 5★: si se le cambia el banner, la
-        # rareza o la marca de destacado, el banner se queda sin 5★ (y el pity de ese banner
-        # no tendria que entregar). Por eso esos tres campos quedan fijos al editarlo.
-        # Un campo "disabled" ignora lo que llegue por POST y usa el valor guardado, asi que
-        # esto no se puede saltar con un formulario modificado.
         self.destacado_fijo = bool(
             self.instance.pk
             and self.instance.es_destacado
@@ -289,7 +271,6 @@ ORDEN_CATALOGO = {
 
 
 class FiltroBannerForm(forms.Form):
-    """Buscador y filtro de la tabla de gestion de banners."""
 
     q = forms.CharField(required=False, max_length=100, label='Buscar')
     tipo = forms.ChoiceField(
