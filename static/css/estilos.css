@@ -425,30 +425,20 @@ code {
     border-bottom: 2px solid var(--cian);
 }
 
-.banner-hero--personaje {
-    background-image: url('../img/banner-personaje.jpg');
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-    background-position: 11vw 12%;
-}
-
-.banner-hero--arma {
-    background-image: url('../img/banner-arma.webp');
-    background-repeat: no-repeat;
-    background-size: 128% auto;
-    background-position: 100% 35%;
-}
+/* ---- Nota: .banner-hero--personaje/--arma/--permanente ya NO fijan su propio
+   background-image/size/position. Desde que el banner tiene portada propia
+   (Banner.imagen), el <section> siempre trae un background-image inline (el propio
+   o el generico por defecto; ver Banner.imagen_fondo_css() e includes/banner_hero.html),
+   y ese inline gana sobre cualquier regla de clase para la MISMA propiedad. Dejar fijos
+   esos tres valores habria recortado/desplazado cualquier imagen subida o la generica,
+   porque estaban ajustados a mano para los archivos puntuales que esto reemplaza
+   (banner-personaje.jpg, banner-arma.webp y el degradado violeta). El "cover"/"center"
+   de la regla base .banner-hero (mas arriba) ya sirve para cualquier imagen. ---- */
 
 .banner-hero--arma .banner-hero-overlay {
     background:
         linear-gradient(90deg, rgba(5, 8, 13, 0.98) 0%, rgba(5, 8, 13, 0.93) 36%, rgba(5, 8, 13, 0.3) 60%, rgba(5, 8, 13, 0) 84%),
         linear-gradient(0deg, rgba(5, 8, 13, 0.9) 0%, transparent 45%);
-}
-
-.banner-hero--permanente {
-    background-image:
-        radial-gradient(600px 300px at 80% 20%, rgba(140, 100, 255, 0.35), transparent 70%),
-        linear-gradient(135deg, #0a1018 0%, #1b2036 55%, #2b2f55 100%);
 }
 
 .banner-hero-overlay {
@@ -1410,11 +1400,6 @@ code {
 @media (max-width: 860px) {
     .banner-hero {
         min-height: 520px;
-    }
-
-    .banner-hero--personaje {
-        background-size: auto 100%;
-        background-position: 70% center;
     }
 
     .banner-hero-overlay,

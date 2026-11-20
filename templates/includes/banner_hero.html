@@ -1,5 +1,6 @@
 {% with destacado=banner.item_destacado %}
-<section class="banner-hero banner-hero--{{ banner.tipo }}{% if compacto %} banner-hero--compacto{% endif %}">
+{# La portada (propia del banner, o la generica por defecto) va inline: ver Banner.imagen_fondo_css() #}
+<section class="banner-hero banner-hero--{{ banner.tipo }}{% if compacto %} banner-hero--compacto{% endif %}" style="{{ banner.imagen_fondo_css }}">
     <div class="banner-hero-overlay"></div>
     {% if numero %}<div class="banner-num">{{ numero|stringformat:"02d" }}</div>{% endif %}
 
