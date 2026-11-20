@@ -63,28 +63,28 @@ Entrar como admin (`/items/nuevo/` y `/banners/gestionar/`). Datos: usar un bann
 
 | # | Acción / entrada | Resultado esperado | Observado |
 |---|------------------|--------------------|-----------|
-| M01 | Elegir un banner limitado sin destacado y rareza 5★ | La casilla "destacado" se marca sola, se ve atenuada y no se puede desmarcar; aviso explicando por qué | _(completar)_ |
-| M02 | Sin tocar nada más, cambiar la rareza a 4★ | La casilla se desmarca; la rareza no queda trabada | _(completar)_ |
-| M03 | Elegir un banner que ya tiene destacado y rareza 5★ | La rareza se marca en rojo con el nombre del destacado actual; la casilla queda bloqueada sin marcar | _(completar)_ |
-| M04 | En ese mismo banner, abrir la lista de rareza | La opción 5★ está deshabilitada y hay un aviso | _(completar)_ |
-| M05 | Elegir categoría Personaje en un banner de armas | La categoría se marca en rojo: "solo admite armas"; la opción Personaje queda deshabilitada al cambiar de banner | _(completar)_ |
-| M06 | Elegir el banner permanente | La casilla destacado se desmarca y se bloquea; categoría y rareza libres | _(completar)_ |
-| M07 | Cambiar de banner varias veces seguidas | Marcas y avisos se actualizan al instante y no queda ninguno viejo | _(completar)_ |
-| M08 | Corregir el error (cambiar a 4★ o a otro banner) y presionar Guardar | El rojo desaparece y se guarda sin errores | _(completar)_ |
-| M09 | Editar el destacado de un banner limitado | Banner, rareza y casilla aparecen bloqueados; aviso "quedan fijos"; el nombre y la descripción sí se pueden cambiar y se guardan | _(completar)_ |
-| M10 | Desde las herramientas del navegador, quitar `disabled` a esos campos, cambiar la rareza a 4★ y guardar | El servidor ignora el cambio: el item sigue 5★, destacado y en su banner | _(completar)_ |
+| M01 | Elegir un banner limitado sin destacado y rareza 5★ | La casilla "destacado" se marca sola, se ve atenuada y no se puede desmarcar; aviso explicando por qué | Verificado |
+| M02 | Sin tocar nada más, cambiar la rareza a 4★ | La casilla se desmarca; la rareza no queda trabada | Verificado |
+| M03 | Elegir un banner que ya tiene destacado y rareza 5★ | La rareza se marca en rojo con el nombre del destacado actual; la casilla queda bloqueada sin marcar | _(Verificado)_ |
+| M04 | En ese mismo banner, abrir la lista de rareza | La opción 5★ está deshabilitada y hay un aviso | _(Verificado)_ |
+| M05 | Elegir categoría Personaje en un banner de armas | La categoría se marca en rojo: "solo admite armas"; la opción Personaje queda deshabilitada al cambiar de banner | _(Verificado)_ |
+| M06 | Elegir el banner permanente | La casilla destacado se desmarca y se bloquea; categoría y rareza libres | _(Verificado)_ |
+| M07 | Cambiar de banner varias veces seguidas | Marcas y avisos se actualizan al instante y no queda ninguno viejo | _(Verificado)_ |
+| M08 | Corregir el error (cambiar a 4★ o a otro banner) y presionar Guardar | El rojo desaparece y se guarda sin errores | _(Verificado)_ |
+| M09 | Editar el destacado de un banner limitado | Banner, rareza y casilla aparecen bloqueados; aviso "quedan fijos"; el nombre y la descripción sí se pueden cambiar y se guardan | _(Verificado)_ |
+| M10 | Desde las herramientas del navegador, quitar `disabled` a esos campos, cambiar la rareza a 4★ y guardar | El servidor ignora el cambio: el item sigue 5★, destacado y en su banner | _(Verificado)_ |
 
 ### F. Banners y gestión
 
 | # | Acción / entrada | Resultado esperado | Observado |
 |---|------------------|--------------------|-----------|
-| M11 | Editar un banner de armas que tiene destacado | En "Tipo", Permanente y Personaje limitado aparecen deshabilitados y un aviso dice por qué | _(completar)_ |
-| M12 | Editar un banner vacío | Los tres tipos se pueden elegir y no hay aviso | _(completar)_ |
-| M13 | Gestionar items: escribir en el buscador y cambiar los selectores | La tabla se actualiza sin recargar la página y la URL cambia | _(completar)_ |
-| M14 | Con más de 10 items, mirar el pie de la tabla y pasar de página | Muestra 10 por página, "Página X de Y" y Anterior/Siguiente que conservan los filtros | _(completar)_ |
-| M15 | Filtrar en vivo y luego presionar "Eliminar" en una fila | Aparece el diálogo de confirmación (no borra directo) | _(completar)_ |
-| M16 | Gestionar banners: buscar por nombre y filtrar por tipo | Igual que items: en vivo, con conteo y paginación de 10 | _(completar)_ |
-| M17 | Entrar como staff a Gestionar | Ve la tabla y "Editar", pero no "Crear" ni "Eliminar" | _(completar)_ |
+| M11 | Editar un banner de armas que tiene destacado | En "Tipo", Permanente y Personaje limitado aparecen deshabilitados y un aviso dice por qué | _(Verificado)_ |
+| M12 | Editar un banner vacío | Los tres tipos se pueden elegir y no hay aviso | _(Verificado)_ |
+| M13 | Gestionar items: escribir en el buscador y cambiar los selectores | La tabla se actualiza sin recargar la página y la URL cambia | _(Verificado)_ |
+| M14 | Con más de 10 items, mirar el pie de la tabla y pasar de página | Muestra 10 por página, "Página X de Y" y Anterior/Siguiente que conservan los filtros | _(Verificado)_ |
+| M15 | Filtrar en vivo y luego presionar "Eliminar" en una fila | Aparece el diálogo de confirmación (no borra directo) | _(Verificado)_ |
+| M16 | Gestionar banners: buscar por nombre y filtrar por tipo | Igual que items: en vivo, con conteo y paginación de 10 | _(Verificado)_ |
+| M17 | Entrar como staff a Gestionar | Ve la tabla y "Editar", pero no "Crear" ni "Eliminar" | _(Verificado)_ |
 
 ## 6. Limitaciones conocidas (para reconocerlas en la presentación)
 
