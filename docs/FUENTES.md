@@ -1,8 +1,5 @@
 # Fuentes y herramientas utilizadas
 
-Cada fila indica qué se usó, para qué y cómo se verificó su aporte. Los textos marcados con
-**[completar]** deben escribirse con lo que el equipo realmente hizo.
-
 | Fuente / herramienta | Finalidad | Cómo se verificó su aporte |
 |----------------------|-----------|----------------------------|
 | Documentación de Django — docs.djangoproject.com | Vistas, formularios (`Form` y `ModelForm`), `ImageField` y `request.FILES`, autenticación, sesiones, `SlugField` y `slugify` | Se probó cada ruta y cada formulario en el navegador (ver `COMPROBACIONES.md`) |
