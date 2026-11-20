@@ -13,13 +13,22 @@
             {% else %}Primero se crea el banner; después le agregas sus personajes o armas.{% endif %}
         </p>
 
-        <form method="post" novalidate>
+        {# enctype multipart: necesario para subir la imagen de portada. novalidate: la validacion real se hace en el servidor. #}
+        <form method="post" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
             {{ form.nombre|as_crispy_field }}
             {{ form.tipo|as_crispy_field }}
             {# Aviso en vivo al cambiar el tipo (js/banner_reglas.js) #}
             <div class="aviso-regla" id="avisoTipo" role="alert" hidden></div>
             {{ form.descripcion|as_crispy_field }}
+
+            {% if editando and imagen_actual %}
+            <div class="img-actual img-actual--banner">
+                <img src="{{ imagen_actual.url }}" alt="Imagen actual del banner">
+                <span class="apagado">Imagen actual. Sube otra para reemplazarla, o marca «Clear» para quitarla y usar la genérica.</span>
+            </div>
+            {% endif %}
+            {{ form.imagen|as_crispy_field }}
 
             <div class="acciones-form">
                 <button type="submit" class="btn-w btn-w--cian">{% if editando %}Guardar cambios{% else %}Crear banner{% endif %}</button>

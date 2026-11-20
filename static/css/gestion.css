@@ -180,6 +180,12 @@
     background: #0e1826;
 }
 
+.img-actual--banner img {
+    width: 220px;
+    height: 88px;
+    object-position: center;
+}
+
 .acciones-form {
     display: flex;
     flex-wrap: wrap;
