@@ -1,3 +1,5 @@
+from PIL import Image
+
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 
@@ -9,7 +11,31 @@ CANTIDAD_CHOICES = [
 ]
 
 EXTENSIONES_IMAGEN = ('.jpg', '.jpeg', '.png', '.webp')
-TAMANO_MAXIMO_IMAGEN = 2 * 1024 * 1024 
+TAMANO_MAXIMO_IMAGEN = 2 * 1024 * 1024
+
+# Resolucion minima de la portada del banner. El banner-hero se ve a lo ancho del
+# contenedor (hasta 1140px) con "background-size: cover", en una franja de 1140x460px
+# (proporcion 2.48:1 aprox). Por eso se pide una imagen panoramica de al menos 1600x650
+# (holgada para que no se vea borrosa ni en pantallas grandes/retina), con una proporcion
+# parecida (entre 2:1 y 3:1): fuera de ese rango, "cover" recortaria demasiado la imagen.
+BANNER_IMG_ANCHO_MIN = 1200
+BANNER_IMG_ALTO_MIN = 500
+BANNER_IMG_RATIO_MIN = 1.7
+BANNER_IMG_RATIO_MAX = 3.0
+BANNER_IMG_RESOLUCION_TEXTO = (
+    f'{BANNER_IMG_ANCHO_MIN}×{BANNER_IMG_ALTO_MIN} px como mínimo, panorámica '
+    f'(ancho entre {BANNER_IMG_RATIO_MIN:.1f} y {BANNER_IMG_RATIO_MAX:.1f} veces el alto)'
+)
+
+
+def _validar_formato_y_peso(imagen):
+    """Formato y peso de imagen: regla compartida entre ItemForm y BannerForm."""
+    if isinstance(imagen, UploadedFile):
+        if not imagen.name.lower().endswith(EXTENSIONES_IMAGEN):
+            raise forms.ValidationError('Formato no permitido: usa JPG, PNG o WEBP.')
+        if imagen.size > TAMANO_MAXIMO_IMAGEN:
+            raise forms.ValidationError('La imagen pesa más de 2 MB. Sube una más liviana.')
+    return imagen
 
 
 class SimularTiradaForm(forms.Form):
@@ -35,11 +61,12 @@ class BannerForm(forms.ModelForm):
 
     class Meta:
         model = Banner
-        fields = ['nombre', 'tipo', 'descripcion']
+        fields = ['nombre', 'tipo', 'descripcion', 'imagen']
         labels = {
             'nombre': 'Nombre del banner',
             'tipo': 'Tipo de banner',
             'descripcion': 'Descripción',
+            'imagen': 'Imagen de portada',
         }
         help_texts = {
             'nombre': 'Entre 3 y 100 caracteres. No puede repetirse.',
@@ -47,9 +74,17 @@ class BannerForm(forms.ModelForm):
                     'Arma limitada: solo armas y un 5★ destacado. '
                     'Permanente: personajes y armas, sin destacado.',
             'descripcion': 'Opcional. Máximo 400 caracteres.',
+            'imagen': f'Opcional. JPG, PNG o WEBP de hasta 2 MB, de {BANNER_IMG_RESOLUCION_TEXTO}. '
+                      'Si no subes nada se usa una imagen genérica. Para quitar la que ya tiene, '
+                      'marca «Clear» y guarda.',
         }
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 4}),
+            # ClearableFileInput (el default de Django para un ImageField opcional) ya trae
+            # el link a la imagen actual y la casilla "Clear" para quitarla: no hace falta
+            # nada hecho a mano para eso, a diferencia de ItemForm (que no la deja quitar
+            # porque siempre usa su 'sin_imagen.jpg' de respaldo).
+            'imagen': forms.ClearableFileInput(attrs={'accept': 'image/png,image/jpeg,image/webp'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -72,6 +107,25 @@ class BannerForm(forms.ModelForm):
                 f'La descripción tiene {len(descripcion)} caracteres; el máximo es 400.'
             )
         return descripcion
+
+    def clean_imagen(self):
+        imagen = _validar_formato_y_peso(self.cleaned_data.get('imagen'))
+        if isinstance(imagen, UploadedFile):
+            try:
+                ancho, alto = Image.open(imagen).size
+            finally:
+                imagen.seek(0)  # Image.open() deja el puntero movido; hay que rebobinarlo para guardarla bien.
+            if ancho < BANNER_IMG_ANCHO_MIN or alto < BANNER_IMG_ALTO_MIN:
+                raise forms.ValidationError(
+                    f'La imagen mide {ancho}×{alto} px; se necesita {BANNER_IMG_RESOLUCION_TEXTO}.'
+                )
+            ratio = ancho / alto
+            if not (BANNER_IMG_RATIO_MIN <= ratio <= BANNER_IMG_RATIO_MAX):
+                raise forms.ValidationError(
+                    f'La imagen mide {ancho}×{alto} px (proporción {ratio:.2f}:1); se necesita una '
+                    f'imagen panorámica, {BANNER_IMG_RESOLUCION_TEXTO}.'
+                )
+        return imagen
 
     def clean(self):
         datos = super().clean()
@@ -166,13 +220,7 @@ class ItemForm(forms.ModelForm):
         return nombre
 
     def clean_imagen(self):
-        imagen = self.cleaned_data.get('imagen')
-        if isinstance(imagen, UploadedFile):
-            if not imagen.name.lower().endswith(EXTENSIONES_IMAGEN):
-                raise forms.ValidationError('Formato no permitido: usa JPG, PNG o WEBP.')
-            if imagen.size > TAMANO_MAXIMO_IMAGEN:
-                raise forms.ValidationError('La imagen pesa más de 2 MB. Sube una más liviana.')
-        return imagen
+        return _validar_formato_y_peso(self.cleaned_data.get('imagen'))
 
     def clean_probabilidad(self):
         probabilidad = self.cleaned_data.get('probabilidad')

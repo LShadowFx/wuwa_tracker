@@ -288,7 +288,7 @@ def banner_crear(request):
         raise PermissionDenied
 
     if request.method == 'POST':
-        form = BannerForm(request.POST)
+        form = BannerForm(request.POST, request.FILES)
         if form.is_valid():
             banner = form.save()
             messages.success(
@@ -312,7 +312,7 @@ def banner_editar(request, id):
     nombre_original = banner.nombre
 
     if request.method == 'POST':
-        form = BannerForm(request.POST, instance=banner)
+        form = BannerForm(request.POST, request.FILES, instance=banner)
         if form.is_valid():
             banner = form.save()
             messages.success(request, f'Se actualizó el banner «{banner.nombre}» correctamente.')
