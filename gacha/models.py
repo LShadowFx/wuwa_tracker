@@ -1,7 +1,10 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 from django.utils.text import slugify
+
+BANNER_IMAGEN_DEFAULT = 'img/banner_default.svg'
 
 TIPO_BANNER = [
     ('personaje', 'Personaje limitado'),
@@ -24,6 +27,11 @@ class Banner(models.Model):
     nombre = models.CharField(max_length=100)
     tipo = models.CharField(max_length=20, choices=TIPO_BANNER)
     descripcion = models.TextField(blank=True)
+    imagen = models.ImageField(
+        upload_to='banners/', blank=True,
+        help_text='Opcional. Portada propia del banner (distinta de la imagen del item destacado). '
+                  'Si no se sube, se usa una imagen genérica.',
+    )
 
     def __str__(self):
         return self.nombre
@@ -34,11 +42,20 @@ class Banner(models.Model):
                 return item
         return None
 
+    def imagen_portada_url(self):
+        """URL de la portada del banner: la propia si existe, si no la generica por defecto.
+
+        A proposito NO cae de vuelta a la imagen del item destacado (esa se sigue viendo
+        aparte, en el "destacado-pill"): la portada es del banner, no del item.
+        """
+        if self.imagen:
+            return self.imagen.url
+        return static(BANNER_IMAGEN_DEFAULT)
+
     def imagen_fondo_css(self):
-        item = self.item_destacado()
-        if item and item.imagen:
-            return f"background-image:url('{item.imagen.url}')"
-        return ''
+        if not self.imagen and self.tipo == 'permanente':
+            return "background-image:linear-gradient(135deg,#0a1520 0%,#12263a 55%,#1a1030 100%)"
+        return f"background-image:url('{self.imagen_portada_url()}')"
 
 
 class Item(models.Model):
